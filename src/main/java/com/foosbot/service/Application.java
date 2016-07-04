@@ -1,3 +1,5 @@
+package com.foosbot.service;
+
 import static spark.Spark.*;
 
 public class Application {

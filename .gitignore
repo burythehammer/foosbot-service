@@ -15,3 +15,8 @@ hs_err_pid*
 
 /.idea/
 /foosbot-service.iml
+/target/
+src/main/resources/
+src/test/
+target/classes/
+target/generated-sources/
