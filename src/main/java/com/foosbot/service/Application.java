@@ -1,9 +1,13 @@
 package com.foosbot.service;
 
-import static spark.Spark.*;
+import com.foosbot.service.controller.ServiceController;
 
 public class Application {
     public static void main(String[] args) {
-        get("/hello", (req, res) -> "Hello World");
+
+        ServiceController.routes();
+
     }
+
+
 }

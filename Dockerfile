@@ -1,2 +1,2 @@
 FROM maven:3.2-jdk-8-onbuild
-CMD mvn install exec:java
+CMD mvn compile && mvn exec:java
