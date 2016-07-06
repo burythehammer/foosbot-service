@@ -1,30 +1,33 @@
 package com.foosbot.service.model;
 
 
-import com.foosbot.service.match.CreateExistingFoosballMatchDTO;
-import com.foosbot.service.match.CreateNewFoosballMatchDTO;
+import com.foosbot.service.handlers.payloads.ExistingFoosballMatchPayload;
 import com.foosbot.service.match.FoosballMatch;
-import com.foosbot.service.players.PlayerStats;
-import com.foosbot.service.season.RankResult;
+import com.foosbot.service.match.FoosballTeamResult;
+import com.foosbot.service.model.players.FoosballPlayer;
+import com.foosbot.service.model.players.PlayerStats;
+import com.foosbot.service.model.season.RankResult;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 public interface Model {
 
     String hello();
 
-    FoosballMatch getMatchResult(UUID id);
+    Optional<FoosballMatch> getMatchResult(UUID id);
 
     List<FoosballMatch> getAllMatchResults();
 
-    String addMatchResult(CreateNewFoosballMatchDTO match);
+    UUID addMatchResult(FoosballPlayer reporter, Set<FoosballTeamResult> results);
 
-    List<String> addMatchResults(List<CreateExistingFoosballMatchDTO> matches);
+    List<UUID> addMatchResults(List<ExistingFoosballMatchPayload> matches);
 
-    String deleteMatch(String id);
+    UUID deleteMatch(String id);
 
-    PlayerStats getPlayerStats(String id);
+    Optional<PlayerStats> getPlayerStats(String id);
 
     // season
     List<FoosballMatch> getAllSeasonMatches(String seasonName);

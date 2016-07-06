@@ -1,7 +1,7 @@
 package com.foosbot.service.handlers;
 
 
-public interface Validable {
+public interface Validates {
 
     boolean isValid();
 }

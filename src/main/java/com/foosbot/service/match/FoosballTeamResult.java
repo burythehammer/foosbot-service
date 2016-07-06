@@ -1,7 +1,7 @@
 package com.foosbot.service.match;
 
 
-import com.foosbot.service.players.FoosballPlayer;
+import com.foosbot.service.model.players.FoosballPlayer;
 import lombok.Data;
 
 import java.util.Set;

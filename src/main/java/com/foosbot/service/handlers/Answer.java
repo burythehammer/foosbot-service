@@ -1,10 +1,24 @@
 package com.foosbot.service.handlers;
 
+import org.eclipse.jetty.http.HttpStatus;
+
 public class Answer {
+
+    private int code;
+    private String body;
 
     public Answer(int code) {
         this.code = code;
         this.body = "";
+    }
+
+    public Answer(int code, String body) {
+        this.code = code;
+        this.body = body;
+    }
+
+    public static Answer ok(String body) {
+        return new Answer(HttpStatus.OK_200, body);
     }
 
     @Override
@@ -15,9 +29,8 @@ public class Answer {
         Answer answer = (Answer) o;
 
         if (code != answer.code) return false;
-        if (body != null ? !body.equals(answer.body) : answer.body != null) return false;
+        return body != null ? body.equals(answer.body) : answer.body == null;
 
-        return true;
     }
 
     @Override
@@ -38,17 +51,5 @@ public class Answer {
 
     public int getCode() {
         return code;
-    }
-
-    private int code;
-    private String body;
-
-    public Answer(int code, String body) {
-        this.code = code;
-        this.body = body;
-    }
-
-    public static Answer ok(String body) {
-        return new Answer(200, body);
     }
 }

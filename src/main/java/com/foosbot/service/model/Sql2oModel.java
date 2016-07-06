@@ -1,16 +1,27 @@
 package com.foosbot.service.model;
 
 
-import com.foosbot.service.match.CreateExistingFoosballMatchDTO;
-import com.foosbot.service.match.CreateNewFoosballMatchDTO;
+import com.foosbot.service.handlers.payloads.ExistingFoosballMatchPayload;
 import com.foosbot.service.match.FoosballMatch;
-import com.foosbot.service.players.PlayerStats;
-import com.foosbot.service.season.RankResult;
+import com.foosbot.service.match.FoosballTeamResult;
+import com.foosbot.service.model.players.FoosballPlayer;
+import com.foosbot.service.model.players.PlayerStats;
+import com.foosbot.service.model.season.RankResult;
+import org.sql2o.Sql2o;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 public class Sql2oModel implements Model {
+
+    private final Sql2o sql2o;
+
+    public Sql2oModel(Sql2o sql2o) {
+        this.sql2o = sql2o;
+    }
+
 
     @Override
     public String hello() {
@@ -18,7 +29,7 @@ public class Sql2oModel implements Model {
     }
 
     @Override
-    public FoosballMatch getMatchResult(final UUID id) {
+    public Optional<FoosballMatch> getMatchResult(UUID id) {
         return null;
     }
 
@@ -28,32 +39,32 @@ public class Sql2oModel implements Model {
     }
 
     @Override
-    public String addMatchResult(final CreateNewFoosballMatchDTO match) {
+    public UUID addMatchResult(FoosballPlayer reporter, Set<FoosballTeamResult> results) {
         return null;
     }
 
     @Override
-    public List<String> addMatchResults(final List<CreateExistingFoosballMatchDTO> matches) {
+    public List<UUID> addMatchResults(List<ExistingFoosballMatchPayload> matches) {
         return null;
     }
 
     @Override
-    public String deleteMatch(final String id) {
+    public UUID deleteMatch(String id) {
         return null;
     }
 
     @Override
-    public PlayerStats getPlayerStats(final String id) {
+    public Optional<PlayerStats> getPlayerStats(String id) {
         return null;
     }
 
     @Override
-    public List<FoosballMatch> getAllSeasonMatches(final String seasonName) {
+    public List<FoosballMatch> getAllSeasonMatches(String seasonName) {
         return null;
     }
 
     @Override
-    public List<RankResult> getSeasonRank(final String seasonName) {
+    public List<RankResult> getSeasonRank(String seasonName) {
         return null;
     }
 

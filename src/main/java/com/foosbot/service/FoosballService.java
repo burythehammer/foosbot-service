@@ -1,7 +1,7 @@
 package com.foosbot.service;
 
 import com.beust.jcommander.JCommander;
-import com.foosbot.service.handlers.FoosballRequestsHandler;
+import com.foosbot.service.handlers.*;
 import com.foosbot.service.model.Model;
 import com.foosbot.service.model.Sql2oModel;
 import org.sql2o.Sql2o;
@@ -17,7 +17,6 @@ public class FoosballService {
 
     private static final Logger logger = Logger.getLogger(FoosballService.class.getCanonicalName());
 
-
     public static void main(String[] args) {
 
         CommandLineOptions options = new CommandLineOptions();
@@ -30,6 +29,32 @@ public class FoosballService {
         logger.finest("Options.dbPort = " + options.dbPort);
         logger.finest("Options.servicePort = " + options.servicePort);
 
+        Model model = getSqlModel(options);
+
+        // test
+        get("/hello", new HelloWorldHandler(model));
+
+        // matches
+        get("/match/:uuid", new GetSingleMatchHandler(model));
+        post("/match/", new AddMatchHandler(model));
+        post("/match/batch/", new AddManyMatchHandler(model));
+        delete("/match/:uuid", new DeleteMatchHandler(model));
+
+        // players
+        get("/player/:name", new GetPlayerStatsHandler(model));
+
+        // season
+        get("/season/:name", new GetSeasonHandler(model));
+        get("/season/:name/rank", new GetSeasonRankHandler(model));
+        post("/season/", new NewSeasonHandler(model));
+
+
+        // Global rank
+        get("/rank/", new GetRankHandler(model));
+
+    }
+
+    private static Sql2oModel getSqlModel(CommandLineOptions options) {
         Sql2o sql2o = new Sql2o("jdbc:postgresql://" + options.dbHost + ":" + options.dbPort + "/" + options.database,
                 options.dbUsername, options.dbPassword, new PostgresQuirks() {
             {
@@ -38,29 +63,7 @@ public class FoosballService {
             }
         });
 
-        Model model = new Sql2oModel();
-
-        // test
-        get("/hello", (request, response) -> "Hello World");
-
-        // matches
-        get("/match/:id", );
-        post("/match/", "application/json", matchService::addMatchResult);
-        post("/match/batch/", matchService::addMatchResult);
-        delete("/match/:id", matchService::deleteMatch);
-
-        // players
-        get("/player/:name", FoosballRequestsHandler::getPlayerStats);
-
-        // season
-        get("/season/:name", FoosballRequestsHandler::getSeason);
-        get("/season/:name/rank", FoosballRequestsHandler::getSeasonRank);
-        post("/season/", FoosballRequestsHandler::createSeason);
-
-
-        // Global rank
-        get("/rank/", FoosballRequestsHandler::getGlobalRanks);
-
+        return new Sql2oModel(sql2o);
     }
 
 

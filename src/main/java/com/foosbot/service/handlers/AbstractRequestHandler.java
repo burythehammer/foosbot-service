@@ -3,6 +3,7 @@ package com.foosbot.service.handlers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.foosbot.service.model.Model;
+import org.eclipse.jetty.http.HttpStatus;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -12,12 +13,10 @@ import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class AbstractRequestHandler<V extends Validable> implements RequestHandler<V>, Route {
+public abstract class AbstractRequestHandler<V extends Validates> implements RequestHandler<V>, Route {
 
-    private Class<V> valueClass;
     protected Model model;
-
-    private static final int HTTP_BAD_REQUEST = 400;
+    private Class<V> valueClass;
 
     public AbstractRequestHandler(final Class<V> valueClass, final Model model) {
         this.valueClass = valueClass;
@@ -41,15 +40,15 @@ public abstract class AbstractRequestHandler<V extends Validable> implements Req
         }
     }
 
-    public final Answer process(final V value, final Map<String, String> queryParams, final boolean shouldReturnHtml) {
+    public final Answer process(final V value, final Map<String, String> urlParams) {
         if (!value.isValid()) {
-            return new Answer(HTTP_BAD_REQUEST);
+            return new Answer(HttpStatus.BAD_REQUEST_400);
         } else {
-            return processImpl(value, queryParams, shouldReturnHtml);
+            return processImpl(value, urlParams);
         }
     }
 
-    protected abstract Answer processImpl(V value, Map<String, String> queryParams, boolean shouldReturnHtml);
+    protected abstract Answer processImpl(V value, Map<String, String> urlParams);
 
 
     @Override
@@ -57,13 +56,9 @@ public abstract class AbstractRequestHandler<V extends Validable> implements Req
         final ObjectMapper objectMapper = new ObjectMapper();
         final V value = objectMapper.readValue(request.body(), valueClass);
         final Map<String, String> queryParams = new HashMap<>();
-        final Answer answer = process(value, queryParams, shouldReturnHtml(request));
+        final Answer answer = process(value, queryParams);
         response.status(answer.getCode());
-        if (shouldReturnHtml(request)) {
-            response.type("text/html");
-        } else {
-            response.type("application/json");
-        }
+        response.type("application/json");
         response.body(answer.getBody());
         return answer.getBody();
     }

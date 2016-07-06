@@ -2,8 +2,8 @@ package com.foosbot.service.handlers;
 
 import java.util.Map;
 
-public interface RequestHandler<V extends Validable> {
+interface RequestHandler<V extends Validates> {
 
-    Answer process(V value, Map<String, String> urlParams, boolean shouldReturnHtml);
+    Answer process(V value, Map<String, String> urlParams);
 
 }
