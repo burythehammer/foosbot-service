@@ -1,37 +1,14 @@
-package com.foosbot.service.controller;
+package com.foosbot.service.handlers;
 
 import spark.Request;
 import spark.Response;
 
-import static spark.Spark.*;
 
-
-public class ServiceController {
+public class FoosballRequestsHandler {
 
     public static void routes() {
 
-        final MatchService matchService = new MatchService();
 
-        // test
-        get("/hello", (request, response) -> "Hello World");
-
-        // matches
-        get("/match/:id", matchService::getMatchResult);
-        post("/match/", "application/json", matchService::addMatchResult);
-        post("/match/batch/", matchService::addMatchResult);
-        delete("/match/:id", matchService::deleteMatch);
-
-        // players
-        get("/player/:name", ServiceController::getPlayerStats);
-
-        // season
-        get("/season/:name", ServiceController::getSeason);
-        get("/season/:name/rank", ServiceController::getSeasonRank);
-        post("/season/", ServiceController::createSeason);
-
-
-        // Global rank
-        get("/rank/", ServiceController::getGlobalRanks);
 
     }
 

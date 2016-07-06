@@ -1,4 +1,4 @@
-package com.foosbot.service.controller;
+package com.foosbot.service.handlers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.foosbot.service.match.CreateNewFoosballMatchDTO;
@@ -46,7 +46,7 @@ public class MatchService {
         final String id = request.params(":id");
         final FoosballMatch foosballMatch = foosballMatches.get(id);
 
-        if (foosballMatch == null){
+        if (foosballMatch == null) {
             response.status(HttpStatus.NOT_FOUND_404);
             return "Could not find match " + id;
         }
