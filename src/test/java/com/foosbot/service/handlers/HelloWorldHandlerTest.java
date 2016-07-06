@@ -7,9 +7,8 @@ import org.junit.Test;
 
 import java.util.Collections;
 
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.easymock.EasyMock.*;
 
 
 public class HelloWorldHandlerTest {
@@ -17,10 +16,14 @@ public class HelloWorldHandlerTest {
     @Test
     public void helloWorld() throws Exception {
         Model model = EasyMock.createMock(Model.class);
+        expect(model.hello()).andReturn("Hello World!");
         replay(model);
 
         HelloWorldHandler handler = new HelloWorldHandler(model);
-        assertEquals(new Answer(200, "Hello World"), handler.process(new EmptyPayload(), Collections.emptyMap()));
+
+        assertThat(handler.process(new EmptyPayload(), Collections.emptyMap()))
+                .isEqualTo(new Answer(200, "Hello World!"));
+
         verify(model);
     }
 

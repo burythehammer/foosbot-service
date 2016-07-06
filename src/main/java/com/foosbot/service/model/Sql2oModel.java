@@ -7,12 +7,11 @@ import com.foosbot.service.match.FoosballTeamResult;
 import com.foosbot.service.model.players.FoosballPlayer;
 import com.foosbot.service.model.players.PlayerStats;
 import com.foosbot.service.model.season.RankResult;
+import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.time.Instant;
+import java.util.*;
 
 public class Sql2oModel implements Model {
 
@@ -25,22 +24,60 @@ public class Sql2oModel implements Model {
 
     @Override
     public String hello() {
-        return null;
+        return "Hello World!";
     }
 
     @Override
-    public Optional<FoosballMatch> getMatchResult(UUID id) {
-        return null;
+    public Optional<FoosballMatch> getMatchResult(UUID uuid) {
+
+        try (Connection conn = sql2o.open()) {
+            List<FoosballMatch> matches = conn.createQuery("select * from matches where uuid=:match_uuid")
+                    .addParameter("match_uuid", uuid)
+                    .executeAndFetch(FoosballMatch.class);
+
+            if (matches.size() == 0) {
+                return Optional.empty();
+            } else if (matches.size() == 1) {
+                return Optional.of(matches.get(0));
+            } else {
+                throw new RuntimeException();
+            }
+        }
     }
 
     @Override
     public List<FoosballMatch> getAllMatchResults() {
-        return null;
+        try (Connection conn = sql2o.open()) {
+            return conn.createQuery("select * from matches")
+                    .executeAndFetch(FoosballMatch.class);
+        }
     }
 
     @Override
-    public UUID addMatchResult(FoosballPlayer reporter, Set<FoosballTeamResult> results) {
-        return null;
+    public UUID addMatchResult(FoosballPlayer reporter, Set<FoosballTeamResult> resultSet) {
+
+        try (Connection conn = sql2o.beginTransaction()) {
+
+            UUID matchUUID = UUID.randomUUID();
+            final List<FoosballTeamResult> results = new ArrayList<>(resultSet);
+
+            final FoosballTeamResult team1Result = results.get(0);
+            final FoosballTeamResult team2Result = results.get(1);
+
+            conn.createQuery("insert into matches(match_uuid, reporter, team1, team2, team1score, team2score, timestamp) VALUES (:match_uuid, :title, :content, :date)")
+                    .addParameter("match_uuid", matchUUID)
+                    .addParameter("reporter", reporter.getName())
+                    .addParameter("team1", team1Result.getPlayers())
+                    .addParameter("team2", team2Result.getPlayers())
+                    .addParameter("team1score", team1Result.getScore())
+                    .addParameter("team2score", team2Result.getScore())
+                    .addParameter("timestamp", Instant.now())
+                    .executeUpdate();
+
+            conn.commit();
+            return matchUUID;
+        }
+
     }
 
     @Override
@@ -49,8 +86,12 @@ public class Sql2oModel implements Model {
     }
 
     @Override
-    public UUID deleteMatch(String id) {
-        return null;
+    public void deleteMatch(String uuid) {
+        try (Connection conn = sql2o.open()) {
+            conn.createQuery("delete from matches where match_uuid=:match_uuid")
+                    .addParameter("match_uuid", uuid)
+                    .executeUpdate();
+        }
     }
 
     @Override

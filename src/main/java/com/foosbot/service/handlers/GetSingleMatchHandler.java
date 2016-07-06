@@ -26,13 +26,13 @@ public class GetSingleMatchHandler extends AbstractRequestHandler<EmptyPayload> 
         try {
             uuid = UUID.fromString(urlParams.get(":uuid"));
         } catch (IllegalArgumentException e) {
-            return new Answer(404);
+            return new Answer(404, "Match " + urlParams.get(":uuid") + " not a valid UUID");
         }
 
         Optional<FoosballMatch> match = model.getMatchResult(uuid);
 
         if (!match.isPresent()) {
-            return new Answer(404);
+            return new Answer(404, "Match " + uuid + " not found");
         }
 
         return Answer.ok(dataToJson(match.get()));

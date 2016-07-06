@@ -8,12 +8,12 @@ import java.util.Map;
 
 public class HelloWorldHandler extends AbstractRequestHandler<EmptyPayload> {
     public HelloWorldHandler(Model model) {
-        super(EmptyPayload.class, null);
+        super(EmptyPayload.class, model);
     }
 
     @Override
     protected Answer processImpl(EmptyPayload value, Map<String, String> urlParams) {
-        return Answer.ok("Hello World");
+        return Answer.ok(model.hello());
     }
 
 }

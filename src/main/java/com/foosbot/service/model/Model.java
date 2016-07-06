@@ -17,7 +17,7 @@ public interface Model {
 
     String hello();
 
-    Optional<FoosballMatch> getMatchResult(UUID id);
+    Optional<FoosballMatch> getMatchResult(UUID uuid);
 
     List<FoosballMatch> getAllMatchResults();
 
@@ -25,7 +25,7 @@ public interface Model {
 
     List<UUID> addMatchResults(List<ExistingFoosballMatchPayload> matches);
 
-    UUID deleteMatch(String id);
+    void deleteMatch(String id);
 
     Optional<PlayerStats> getPlayerStats(String id);
 
