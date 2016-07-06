@@ -2,6 +2,7 @@ package com.foosbot.service;
 
 import com.beust.jcommander.JCommander;
 import com.foosbot.service.handlers.HelloWorldHandler;
+import com.foosbot.service.model.Model;
 import com.foosbot.service.model.Sql2oModel;
 import org.sql2o.Sql2o;
 import org.sql2o.converters.UUIDConverter;
@@ -28,10 +29,10 @@ public class FoosballService {
         logger.finest("Options.dbPort = " + options.dbPort);
         logger.finest("Options.servicePort = " + options.servicePort);
 
-        // Model model = getSqlModel(options);
+         Model model = getSqlModel(options);
 
         // test
-        get("/hello", new HelloWorldHandler());
+        get("/hello", new HelloWorldHandler(model));
 
 //        // matches
 //        get("/match/:uuid", new GetSingleMatchHandler(model));
