@@ -1,8 +1,7 @@
 package com.foosbot.service;
 
 import com.beust.jcommander.JCommander;
-import com.foosbot.service.handlers.*;
-import com.foosbot.service.model.Model;
+import com.foosbot.service.handlers.HelloWorldHandler;
 import com.foosbot.service.model.Sql2oModel;
 import org.sql2o.Sql2o;
 import org.sql2o.converters.UUIDConverter;
@@ -11,7 +10,7 @@ import org.sql2o.quirks.PostgresQuirks;
 import java.util.UUID;
 import java.util.logging.Logger;
 
-import static spark.Spark.*;
+import static spark.Spark.get;
 
 public class FoosballService {
 
@@ -29,28 +28,28 @@ public class FoosballService {
         logger.finest("Options.dbPort = " + options.dbPort);
         logger.finest("Options.servicePort = " + options.servicePort);
 
-        Model model = getSqlModel(options);
+        // Model model = getSqlModel(options);
 
         // test
-        get("/hello", new HelloWorldHandler(model));
+        get("/hello", new HelloWorldHandler());
 
-        // matches
-        get("/match/:uuid", new GetSingleMatchHandler(model));
-        post("/match/", new AddMatchHandler(model));
-        post("/match/batch/", new AddManyMatchHandler(model));
-        delete("/match/:uuid", new DeleteMatchHandler(model));
-
-        // players
-        get("/player/:name", new GetPlayerStatsHandler(model));
-
-        // season
-        get("/season/:name", new GetSeasonHandler(model));
-        get("/season/:name/rank", new GetSeasonRankHandler(model));
-        post("/season/", new NewSeasonHandler(model));
-
-
-        // Global rank
-        get("/rank/", new GetRankHandler(model));
+//        // matches
+//        get("/match/:uuid", new GetSingleMatchHandler(model));
+//        post("/match/", new AddMatchHandler(model));
+//        post("/match/batch/", new AddManyMatchHandler(model));
+//        delete("/match/:uuid", new DeleteMatchHandler(model));
+//
+//        // players
+//        get("/player/:name", new GetPlayerStatsHandler(model));
+//
+//        // season
+//        get("/season/:name", new GetSeasonHandler(model));
+//        get("/season/:name/rank", new GetSeasonRankHandler(model));
+//        post("/season/", new NewSeasonHandler(model));
+//
+//
+//        // Global rank
+//        get("/rank/", new GetRankHandler(model));
 
     }
 

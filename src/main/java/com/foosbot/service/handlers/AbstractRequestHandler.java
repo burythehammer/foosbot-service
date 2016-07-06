@@ -2,6 +2,7 @@ package com.foosbot.service.handlers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.foosbot.service.handlers.payloads.EmptyPayload;
 import com.foosbot.service.model.Model;
 import org.eclipse.jetty.http.HttpStatus;
 import spark.Request;
@@ -23,10 +24,6 @@ public abstract class AbstractRequestHandler<V extends Validates> implements Req
         this.model = model;
     }
 
-    private static boolean shouldReturnHtml(final Request request) {
-        final String accept = request.headers("Accept");
-        return accept != null && accept.contains("text/html");
-    }
 
     public static String dataToJson(final Object data) {
         try {
@@ -41,7 +38,7 @@ public abstract class AbstractRequestHandler<V extends Validates> implements Req
     }
 
     public final Answer process(final V value, final Map<String, String> urlParams) {
-        if (!value.isValid()) {
+        if (value != null && !value.isValid()) {
             return new Answer(HttpStatus.BAD_REQUEST_400);
         } else {
             return processImpl(value, urlParams);
@@ -54,7 +51,12 @@ public abstract class AbstractRequestHandler<V extends Validates> implements Req
     @Override
     public Object handle(final Request request, final Response response) throws Exception {
         final ObjectMapper objectMapper = new ObjectMapper();
-        final V value = objectMapper.readValue(request.body(), valueClass);
+
+        V value = null;
+        if (valueClass != EmptyPayload.class) {
+            value = objectMapper.readValue(request.body(), valueClass);
+        }
+
         final Map<String, String> queryParams = new HashMap<>();
         final Answer answer = process(value, queryParams);
         response.status(answer.getCode());
