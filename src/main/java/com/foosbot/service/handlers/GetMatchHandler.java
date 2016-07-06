@@ -9,8 +9,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 
-public class GetSingleMatchHandler extends AbstractRequestHandler<EmptyPayload> {
-    public GetSingleMatchHandler(Model model) {
+public class GetMatchHandler extends AbstractRequestHandler<EmptyPayload> {
+    public GetMatchHandler(Model model) {
         super(EmptyPayload.class, model);
     }
 

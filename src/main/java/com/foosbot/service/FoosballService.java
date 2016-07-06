@@ -1,8 +1,8 @@
 package com.foosbot.service;
 
 import com.beust.jcommander.JCommander;
-import com.foosbot.service.handlers.AddMatchHandler;
-import com.foosbot.service.handlers.GetSingleMatchHandler;
+import com.foosbot.service.handlers.CreateMatchHandler;
+import com.foosbot.service.handlers.GetMatchHandler;
 import com.foosbot.service.handlers.HelloWorldHandler;
 import com.foosbot.service.model.Model;
 import com.foosbot.service.model.Sql2oModel;
@@ -38,10 +38,10 @@ public class FoosballService {
         get("/hello", new HelloWorldHandler(model));
 
         // matches
-        get("/match/:uuid", new GetSingleMatchHandler(model));
-        post("/match/", new AddMatchHandler(model));
+        get("/match/:uuid", new GetMatchHandler(model));
+        post("/match/", new CreateMatchHandler(model));
 
-//        post("/match/batch/", new AddManyMatchHandler(model));
+//        post("/match/batch/", new BatchMatchCreationHandler(model));
 //        delete("/match/:uuid", new DeleteMatchHandler(model));
 //
 //        // players

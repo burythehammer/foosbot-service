@@ -13,6 +13,8 @@ public class DeleteMatchHandler extends AbstractRequestHandler<EmptyPayload> {
 
     @Override
     protected Answer processImpl(EmptyPayload value, Map<String, String> urlParams) {
+
+
         return null;
     }
 }

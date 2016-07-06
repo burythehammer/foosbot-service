@@ -5,7 +5,7 @@ import lombok.Data;
 
 
 @Data
-public class AddManyMatchPayload implements Validates {
+public class BatchMatchCreatePayload implements Validates {
 
     @Override
     public boolean isValid() {
