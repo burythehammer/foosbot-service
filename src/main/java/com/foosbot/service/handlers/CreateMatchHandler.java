@@ -8,13 +8,13 @@ import java.util.UUID;
 
 
 public class CreateMatchHandler extends AbstractRequestHandler<CreateMatchPayload> {
-    public CreateMatchHandler(Model model) {
+    public CreateMatchHandler(final Model model) {
         super(CreateMatchPayload.class, model);
     }
 
     @Override
-    protected Answer processImpl(CreateMatchPayload value, Map<String, String> urlParams) {
-        UUID id = model.addMatchResult(value.getReporter(), value.getResults());
+    protected Answer processImpl(final CreateMatchPayload value, final Map<String, String> urlParams) {
+        final UUID id = model.addMatchResult(value.getReporter(), value.getResults());
         return new Answer(201, id.toString());
     }
 }

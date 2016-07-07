@@ -2,9 +2,9 @@ package com.foosbot.service.model.players;
 
 
 import com.foosbot.service.handlers.Validates;
-import lombok.Data;
+import lombok.AllArgsConstructor;
 
-@Data
+@AllArgsConstructor
 public class FoosballPlayer implements Validates {
 
     public String name;

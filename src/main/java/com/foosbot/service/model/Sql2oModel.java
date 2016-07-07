@@ -66,7 +66,7 @@ public class Sql2oModel implements Model {
 
             conn.createQuery("insert into matches(match_uuid, reporter, team1, team2, team1score, team2score, timestamp) VALUES (:match_uuid, :title, :content, :date)")
                     .addParameter("match_uuid", matchUUID)
-                    .addParameter("reporter", reporter.getName())
+                    .addParameter("reporter", reporter.name)
                     .addParameter("team1", team1Result.getPlayers())
                     .addParameter("team2", team2Result.getPlayers())
                     .addParameter("team1score", team1Result.getScore())

@@ -10,26 +10,26 @@ import java.util.UUID;
 
 
 public class GetMatchHandler extends AbstractRequestHandler<EmptyPayload> {
-    public GetMatchHandler(Model model) {
+    public GetMatchHandler(final Model model) {
         super(EmptyPayload.class, model);
     }
 
     @Override
-    protected Answer processImpl(EmptyPayload value, Map<String, String> urlParams) {
+    protected Answer processImpl(final EmptyPayload value, final Map<String, String> urlParams) {
 
         if (!urlParams.containsKey(":uuid")) {
             throw new IllegalArgumentException();
         }
 
-        UUID uuid;
+        final UUID uuid;
 
         try {
             uuid = UUID.fromString(urlParams.get(":uuid"));
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             return new Answer(404, "Match " + urlParams.get(":uuid") + " not a valid UUID");
         }
 
-        Optional<FoosballMatch> match = model.getMatchResult(uuid);
+        final Optional<FoosballMatch> match = model.getMatchResult(uuid);
 
         if (!match.isPresent()) {
             return new Answer(404, "Match " + uuid + " not found");

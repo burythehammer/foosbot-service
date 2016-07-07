@@ -1,6 +1,7 @@
 package com.foosbot.service.handlers.payloads;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.foosbot.service.handlers.Validates;
 import com.foosbot.service.match.FoosballTeamResult;
 import com.foosbot.service.model.players.FoosballPlayer;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toList;
 
 @Data
+@JsonIgnoreProperties(value = { "valid" })
 public class CreateMatchPayload implements Validates {
 
     public FoosballPlayer reporter;
@@ -21,15 +23,20 @@ public class CreateMatchPayload implements Validates {
     public boolean isValid() {
         return reporter != null &&
                 reporter.isValid() &&
-                resultsValid();
+                results != null &&
+                scoresValid() &&
+                results.stream().allMatch(FoosballTeamResult::isValid);
     }
 
-    private boolean resultsValid() {
-        final List<Integer> collect = results.stream()
+    private boolean scoresValid() {
+        final List<Integer> scores = getScores();
+        return scores.contains(10) && scores.stream().filter(v -> v > 0 && v < 10).collect(Collectors.toList()).size() == 1;
+    }
+
+    private List<Integer> getScores() {
+        return results.stream()
                 .map(FoosballTeamResult::getScore)
                 .collect(toList());
-
-        return collect.contains(10) && collect.stream().filter(v -> v > 0 && v < 10).collect(Collectors.toList()).size() == 1;
     }
 
 }

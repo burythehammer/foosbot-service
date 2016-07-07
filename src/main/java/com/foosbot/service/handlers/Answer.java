@@ -7,26 +7,26 @@ public class Answer {
     private int code;
     private String body;
 
-    public Answer(int code) {
+    public Answer(final int code) {
         this.code = code;
         this.body = "";
     }
 
-    public Answer(int code, String body) {
+    public Answer(final int code, final String body) {
         this.code = code;
         this.body = body;
     }
 
-    public static Answer ok(String body) {
+    public static Answer ok(final String body) {
         return new Answer(HttpStatus.OK_200, body);
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Answer answer = (Answer) o;
+        final Answer answer = (Answer) o;
 
         if (code != answer.code) return false;
         return body != null ? body.equals(answer.body) : answer.body == null;
