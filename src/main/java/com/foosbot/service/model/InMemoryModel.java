@@ -1,12 +1,9 @@
 package com.foosbot.service.model;
 
 
-import com.foosbot.service.match.DeprecatedMatch;
 import com.foosbot.service.match.FoosballMatch;
 import com.foosbot.service.match.FoosballTeamResult;
 import com.foosbot.service.model.players.FoosballPlayer;
-import com.foosbot.service.model.players.PlayerStats;
-import com.foosbot.service.model.season.RankResult;
 
 import java.time.Instant;
 import java.util.*;
@@ -45,46 +42,19 @@ public class InMemoryModel implements Model {
         return uuid;
     }
 
-    @Override
-    public List<UUID> addMatchResults(final Set<DeprecatedMatch> deprecatedMatches) {
+//    @Override
+//    public List<UUID> addMatchResults(final Set<DeprecatedMatch> deprecatedMatches) {
+//
+//        return deprecatedMatches.stream().map(m -> {
+//            final UUID uuid = UUID.randomUUID();
+//            final FoosballMatch match = new FoosballMatch(uuid, m.reporter, m.results, m.timestamp.toString());
+//            matches.put(uuid, match);
+//            return uuid;
+//        }).collect(toList());
+//
+//    }
 
-        return deprecatedMatches.stream().map(m -> {
-            final UUID uuid = UUID.randomUUID();
-            final FoosballMatch match = new FoosballMatch(uuid, m.reporter, m.results, m.timestamp.toString());
-            matches.put(uuid, match);
-            return uuid;
-        }).collect(toList());
 
-    }
 
-    @Override
-    public void deleteMatch(final UUID uuid) {
-        matches.remove(uuid);
-    }
-
-    @Override
-    public Optional<PlayerStats> getPlayerStats(final UUID uuid) {
-        return null;
-    }
-
-    @Override
-    public List<FoosballMatch> getAllSeasonMatches(final String seasonName) {
-        return null;
-    }
-
-    @Override
-    public List<RankResult> getSeasonRank(final String seasonName) {
-        return null;
-    }
-
-    @Override
-    public String startNewSeason() {
-        return null;
-    }
-
-    @Override
-    public List<RankResult> getRanks() {
-        return null;
-    }
 
 }

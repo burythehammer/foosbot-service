@@ -1,12 +1,9 @@
 package com.foosbot.service.model;
 
 
-import com.foosbot.service.match.DeprecatedMatch;
 import com.foosbot.service.match.FoosballMatch;
 import com.foosbot.service.match.FoosballTeamResult;
 import com.foosbot.service.model.players.FoosballPlayer;
-import com.foosbot.service.model.players.PlayerStats;
-import com.foosbot.service.model.season.RankResult;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,20 +20,20 @@ public interface Model {
 
     UUID addMatchResult(FoosballPlayer reporter, Set<FoosballTeamResult> results);
 
-    List<UUID> addMatchResults(Set<DeprecatedMatch> matches);
-
-    void deleteMatch(UUID id);
-
-    Optional<PlayerStats> getPlayerStats(UUID uuid);
-
-    // season
-    List<FoosballMatch> getAllSeasonMatches(String seasonName);
-
-    List<RankResult> getSeasonRank(String seasonName);
-
-    String startNewSeason();
-
-    // Global rank
-    List<RankResult> getRanks();
+//    List<UUID> addMatchResults(Set<DeprecatedMatch> matches);
+//
+//    void deleteMatch(UUID id);
+//
+//    Optional<PlayerStats> getPlayerStats(UUID uuid);
+//
+//    // season
+//    List<FoosballMatch> getAllSeasonMatches(String seasonName);
+//
+//    List<RankResult> getSeasonRank(String seasonName);
+//
+//    String startNewSeason();
+//
+//    // Global rank
+//    List<RankResult> getRanks();
 
 }

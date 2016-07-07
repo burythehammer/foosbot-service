@@ -2,12 +2,9 @@ package com.foosbot.service.model;
 
 
 import com.foosbot.service.CommandLineOptions;
-import com.foosbot.service.match.DeprecatedMatch;
 import com.foosbot.service.match.FoosballMatch;
 import com.foosbot.service.match.FoosballTeamResult;
 import com.foosbot.service.model.players.FoosballPlayer;
-import com.foosbot.service.model.players.PlayerStats;
-import com.foosbot.service.model.season.RankResult;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 import org.sql2o.converters.UUIDConverter;
@@ -95,43 +92,17 @@ public class Sql2oModel implements Model {
 
     }
 
-    @Override
-    public List<UUID> addMatchResults(final Set<DeprecatedMatch> matches) {
-        return null;
-    }
-
-    @Override
-    public void deleteMatch(final UUID uuid) {
-        try (Connection conn = sql2o.open()) {
-            conn.createQuery("delete from matches where match_uuid=:match_uuid")
-                    .addParameter("match_uuid", uuid.toString())
-                    .executeUpdate();
-        }
-    }
-
-
-    @Override
-    public Optional<PlayerStats> getPlayerStats(final UUID uuid) {
-        return null;
-    }
-
-    @Override
-    public List<FoosballMatch> getAllSeasonMatches(final String seasonName) {
-        return null;
-    }
-
-    @Override
-    public List<RankResult> getSeasonRank(final String seasonName) {
-        return null;
-    }
-
-    @Override
-    public String startNewSeason() {
-        return null;
-    }
-
-    @Override
-    public List<RankResult> getRanks() {
-        return null;
-    }
+//    @Override
+//    public List<UUID> addMatchResults(final Set<DeprecatedMatch> matches) {
+//        return null;
+//    }
+//
+//    @Override
+//    public void deleteMatch(final UUID uuid) {
+//        try (Connection conn = sql2o.open()) {
+//            conn.createQuery("delete from matches where match_uuid=:match_uuid")
+//                    .addParameter("match_uuid", uuid.toString())
+//                    .executeUpdate();
+//        }
+//    }
 }
