@@ -1,7 +1,7 @@
 package com.foosbot.service.model;
 
 
-import com.foosbot.service.handlers.payloads.ExistingFoosballMatchPayload;
+import com.foosbot.service.match.DeprecatedMatch;
 import com.foosbot.service.match.FoosballMatch;
 import com.foosbot.service.match.FoosballTeamResult;
 import com.foosbot.service.model.players.FoosballPlayer;
@@ -23,11 +23,11 @@ public interface Model {
 
     UUID addMatchResult(FoosballPlayer reporter, Set<FoosballTeamResult> results);
 
-    List<UUID> addMatchResults(List<ExistingFoosballMatchPayload> matches);
+    List<UUID> addMatchResults(Set<DeprecatedMatch> matches);
 
-    void deleteMatch(String id);
+    void deleteMatch(UUID id);
 
-    Optional<PlayerStats> getPlayerStats(String id);
+    Optional<PlayerStats> getPlayerStats(UUID uuid);
 
     // season
     List<FoosballMatch> getAllSeasonMatches(String seasonName);

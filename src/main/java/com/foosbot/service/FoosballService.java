@@ -4,6 +4,7 @@ import com.beust.jcommander.JCommander;
 import com.foosbot.service.handlers.CreateMatchHandler;
 import com.foosbot.service.handlers.GetMatchHandler;
 import com.foosbot.service.handlers.HelloWorldHandler;
+import com.foosbot.service.model.InMemoryModel;
 import com.foosbot.service.model.Model;
 import com.foosbot.service.model.Sql2oModel;
 import org.sql2o.Sql2o;
@@ -32,7 +33,8 @@ public class FoosballService {
         logger.finest("Options.dbPort = " + options.dbPort);
         logger.finest("Options.servicePort = " + options.servicePort);
 
-        Model model = getSqlModel(options);
+//        Model model = getSqlModel(options);
+        Model model = getInMemoryModel();
 
         // test
         get("/hello", new HelloWorldHandler(model));
@@ -58,7 +60,11 @@ public class FoosballService {
 
     }
 
-    private static Sql2oModel getSqlModel(CommandLineOptions options) {
+    private static Model getInMemoryModel() {
+        return new InMemoryModel();
+    }
+
+    private static Sql2oModel getSqlModel(final CommandLineOptions options) {
         Sql2o sql2o = new Sql2o("jdbc:postgresql://" + options.dbHost + ":" + options.dbPort + "/" + options.database,
                 options.dbUsername, options.dbPassword, new PostgresQuirks() {
             {

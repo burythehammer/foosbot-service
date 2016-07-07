@@ -1,7 +1,7 @@
 package com.foosbot.service.model;
 
 
-import com.foosbot.service.handlers.payloads.ExistingFoosballMatchPayload;
+import com.foosbot.service.match.DeprecatedMatch;
 import com.foosbot.service.match.FoosballMatch;
 import com.foosbot.service.match.FoosballTeamResult;
 import com.foosbot.service.model.players.FoosballPlayer;
@@ -17,7 +17,7 @@ public class Sql2oModel implements Model {
 
     private final Sql2o sql2o;
 
-    public Sql2oModel(Sql2o sql2o) {
+    public Sql2oModel(final Sql2o sql2o) {
         this.sql2o = sql2o;
     }
 
@@ -28,10 +28,10 @@ public class Sql2oModel implements Model {
     }
 
     @Override
-    public Optional<FoosballMatch> getMatchResult(UUID uuid) {
+    public Optional<FoosballMatch> getMatchResult(final UUID uuid) {
 
         try (Connection conn = sql2o.open()) {
-            List<FoosballMatch> matches = conn.createQuery("select * from matches where uuid=:match_uuid")
+            final List<FoosballMatch> matches = conn.createQuery("select * from matches where uuid=:match_uuid")
                     .addParameter("match_uuid", uuid)
                     .executeAndFetch(FoosballMatch.class);
 
@@ -54,11 +54,11 @@ public class Sql2oModel implements Model {
     }
 
     @Override
-    public UUID addMatchResult(FoosballPlayer reporter, Set<FoosballTeamResult> resultSet) {
+    public UUID addMatchResult(final FoosballPlayer reporter, final Set<FoosballTeamResult> resultSet) {
 
         try (Connection conn = sql2o.beginTransaction()) {
 
-            UUID matchUUID = UUID.randomUUID();
+            final UUID matchUUID = UUID.randomUUID();
             final List<FoosballTeamResult> results = new ArrayList<>(resultSet);
 
             final FoosballTeamResult team1Result = results.get(0);
@@ -81,31 +81,32 @@ public class Sql2oModel implements Model {
     }
 
     @Override
-    public List<UUID> addMatchResults(List<ExistingFoosballMatchPayload> matches) {
+    public List<UUID> addMatchResults(final Set<DeprecatedMatch> matches) {
         return null;
     }
 
     @Override
-    public void deleteMatch(String uuid) {
+    public void deleteMatch(final UUID uuid) {
         try (Connection conn = sql2o.open()) {
             conn.createQuery("delete from matches where match_uuid=:match_uuid")
-                    .addParameter("match_uuid", uuid)
+                    .addParameter("match_uuid", uuid.toString())
                     .executeUpdate();
         }
     }
 
+
     @Override
-    public Optional<PlayerStats> getPlayerStats(String id) {
+    public Optional<PlayerStats> getPlayerStats(final UUID uuid) {
         return null;
     }
 
     @Override
-    public List<FoosballMatch> getAllSeasonMatches(String seasonName) {
+    public List<FoosballMatch> getAllSeasonMatches(final String seasonName) {
         return null;
     }
 
     @Override
-    public List<RankResult> getSeasonRank(String seasonName) {
+    public List<RankResult> getSeasonRank(final String seasonName) {
         return null;
     }
 

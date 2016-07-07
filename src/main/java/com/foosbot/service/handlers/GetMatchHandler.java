@@ -26,7 +26,7 @@ public class GetMatchHandler extends AbstractRequestHandler<EmptyPayload> {
         try {
             uuid = UUID.fromString(urlParams.get(":uuid"));
         } catch (final IllegalArgumentException e) {
-            return new Answer(404, "Match " + urlParams.get(":uuid") + " not a valid UUID");
+            return new Answer(404, urlParams.get(":uuid") + " not a valid UUID");
         }
 
         final Optional<FoosballMatch> match = model.getMatchResult(uuid);

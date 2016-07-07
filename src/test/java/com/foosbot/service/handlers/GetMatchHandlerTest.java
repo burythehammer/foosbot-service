@@ -37,7 +37,7 @@ public class GetMatchHandlerTest {
         final Set<FoosballTeamResult> results = ImmutableSet.of(result1, result2);
         final String timestamp = "2016-07-07T12:07:45.098Z";
 
-        final FoosballMatch foosballMatch = new FoosballMatch(uuid.toString(), reporter, results, timestamp);
+        final FoosballMatch foosballMatch = new FoosballMatch(uuid, reporter, results, timestamp);
         final EmptyPayload payload = new EmptyPayload();
 
         final Model model = EasyMock.createMock(Model.class);
@@ -48,7 +48,7 @@ public class GetMatchHandlerTest {
 
         final String expectedOutput =
                 "{\n" +
-                "  \"id\" : \"728084e8-7c9a-4133-a9a7-f2bb491ef436\",\n" +
+                "  \"uuid\" : \"728084e8-7c9a-4133-a9a7-f2bb491ef436\",\n" +
                 "  \"reporter\" : {\n" +
                 "    \"name\" : \"@mary\"\n" +
                 "  },\n" +

@@ -11,7 +11,6 @@ import spark.Route;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.HashMap;
 import java.util.Map;
 
 public abstract class AbstractRequestHandler<V extends Validates> implements RequestHandler<V>, Route {
@@ -39,7 +38,7 @@ public abstract class AbstractRequestHandler<V extends Validates> implements Req
 
     public final Answer process(final V value, final Map<String, String> urlParams) {
         if (value != null && !value.isValid()) {
-            return new Answer(HttpStatus.BAD_REQUEST_400);
+            return new Answer(HttpStatus.BAD_REQUEST_400, "Invalid payload");
         } else {
             return processImpl(value, urlParams);
         }
@@ -57,8 +56,9 @@ public abstract class AbstractRequestHandler<V extends Validates> implements Req
             value = objectMapper.readValue(request.body(), valueClass);
         }
 
-        final Map<String, String> queryParams = new HashMap<>();
-        final Answer answer = process(value, queryParams);
+        final Map<String, String> urlParams = request.params();
+
+        final Answer answer = process(value, urlParams);
         response.status(answer.getCode());
         response.type("application/json");
         response.body(answer.getBody());
