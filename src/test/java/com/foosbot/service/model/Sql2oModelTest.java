@@ -1,13 +1,15 @@
 package com.foosbot.service.model;
 
 
-@SuppressWarnings("OptionalGetWithoutIsPresent")
+import com.foosbot.service.CommandLineOptions;
+
 public class Sql2oModelTest extends ModelTest {
 
 
     @Override
-    public InMemoryModel getModel() {
-        return new InMemoryModel();
+    public Sql2oModel getModel() {
+        final CommandLineOptions commandLineOptions = new CommandLineOptions();
+        return Sql2oModel.getSqlModel(commandLineOptions);
     }
 
 

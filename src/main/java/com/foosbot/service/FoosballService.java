@@ -6,12 +6,7 @@ import com.foosbot.service.handlers.GetMatchHandler;
 import com.foosbot.service.handlers.HelloWorldHandler;
 import com.foosbot.service.model.InMemoryModel;
 import com.foosbot.service.model.Model;
-import com.foosbot.service.model.Sql2oModel;
-import org.sql2o.Sql2o;
-import org.sql2o.converters.UUIDConverter;
-import org.sql2o.quirks.PostgresQuirks;
 
-import java.util.UUID;
 import java.util.logging.Logger;
 
 import static spark.Spark.get;
@@ -62,18 +57,6 @@ public class FoosballService {
 
     private static Model getInMemoryModel() {
         return new InMemoryModel();
-    }
-
-    private static Sql2oModel getSqlModel(final CommandLineOptions options) {
-        Sql2o sql2o = new Sql2o("jdbc:postgresql://" + options.dbHost + ":" + options.dbPort + "/" + options.database,
-                options.dbUsername, options.dbPassword, new PostgresQuirks() {
-            {
-                // make sure we use default UUID converter.
-                converters.put(UUID.class, new UUIDConverter());
-            }
-        });
-
-        return new Sql2oModel(sql2o);
     }
 
 

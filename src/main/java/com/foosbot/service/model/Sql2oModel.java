@@ -1,6 +1,7 @@
 package com.foosbot.service.model;
 
 
+import com.foosbot.service.CommandLineOptions;
 import com.foosbot.service.match.DeprecatedMatch;
 import com.foosbot.service.match.FoosballMatch;
 import com.foosbot.service.match.FoosballTeamResult;
@@ -9,6 +10,8 @@ import com.foosbot.service.model.players.PlayerStats;
 import com.foosbot.service.model.season.RankResult;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
+import org.sql2o.converters.UUIDConverter;
+import org.sql2o.quirks.PostgresQuirks;
 
 import java.time.Instant;
 import java.util.*;
@@ -21,10 +24,22 @@ public class Sql2oModel implements Model {
         this.sql2o = sql2o;
     }
 
+    public static Sql2oModel getSqlModel(final CommandLineOptions options) {
+        Sql2o sql2o = new Sql2o("jdbc:postgresql://" + options.dbHost + ":" + options.dbPort + "/" + options.database,
+                options.dbUsername, options.dbPassword, new PostgresQuirks() {
+            {
+                // make sure we use default UUID converter.
+                converters.put(UUID.class, new UUIDConverter());
+            }
+        });
+
+        return new Sql2oModel(sql2o);
+    }
+
 
     @Override
     public String hello() {
-        return "Hello World!";
+        return "Hello, World";
     }
 
     @Override

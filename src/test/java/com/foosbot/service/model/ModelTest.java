@@ -139,13 +139,13 @@ public abstract class ModelTest {
         assertThat(allMatchResults).extracting(FoosballMatch::getUuid).contains(matchId);
     }
 
-    @Test
-    public void addMatchResults() throws Exception {
+//    @Test
+//    public void addMatchResults() throws Exception {
+//
+//    }
 
-    }
-
-    @Test
-    public void deleteMatch() throws Exception {
-
-    }
+//    @Test
+//    public void deleteMatch() throws Exception {
+//
+//    }
 }

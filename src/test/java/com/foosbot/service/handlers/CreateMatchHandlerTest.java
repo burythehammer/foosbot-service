@@ -84,7 +84,7 @@ public class CreateMatchHandlerTest {
 
         final CreateMatchHandler handler = new CreateMatchHandler(model);
 
-        assertThat(handler.process(createMatchPayload, Collections.emptyMap())).isEqualTo(new Answer(400));
+        assertThat(handler.process(createMatchPayload, Collections.emptyMap())).isEqualTo(new Answer(400, "Invalid payload"));
 
         verify(model);
     }
@@ -119,7 +119,7 @@ public class CreateMatchHandlerTest {
 
         final CreateMatchHandler handler = new CreateMatchHandler(model);
 
-        assertThat(handler.process(createMatchPayload, Collections.emptyMap())).isEqualTo(new Answer(400));
+        assertThat(handler.process(createMatchPayload, Collections.emptyMap())).isEqualTo(new Answer(400, "Invalid payload"));
 
         verify(model);
     }
@@ -144,7 +144,7 @@ public class CreateMatchHandlerTest {
 
         final CreateMatchHandler handler = new CreateMatchHandler(model);
 
-        assertThat(handler.process(createMatchPayload, Collections.emptyMap())).isEqualTo(new Answer(400));
+        assertThat(handler.process(createMatchPayload, Collections.emptyMap())).isEqualTo(new Answer(400, "Invalid payload"));
 
         verify(model);
     }
@@ -176,7 +176,7 @@ public class CreateMatchHandlerTest {
 
         final CreateMatchHandler handler = new CreateMatchHandler(model);
 
-        assertThat(handler.process(createMatchPayload, Collections.emptyMap())).isEqualTo(new Answer(400));
+        assertThat(handler.process(createMatchPayload, Collections.emptyMap())).isEqualTo(new Answer(400, "Invalid payload"));
 
         verify(model);
     }
@@ -202,7 +202,8 @@ public class CreateMatchHandlerTest {
 
         final CreateMatchHandler handler = new CreateMatchHandler(model);
 
-        assertThat(handler.process(createMatchPayload, Collections.emptyMap())).isEqualTo(new Answer(400));
+        assertThat(handler.process(createMatchPayload, Collections.emptyMap()))
+                .isEqualTo(new Answer(400, "Invalid payload"));
 
         verify(model);
     }
@@ -231,7 +232,8 @@ public class CreateMatchHandlerTest {
 
         final CreateMatchHandler handler = new CreateMatchHandler(model);
 
-        assertThat(handler.process(createMatchPayload, Collections.emptyMap())).isEqualTo(new Answer(400));
+        assertThat(handler.process(createMatchPayload, Collections.emptyMap()))
+                .isEqualTo(new Answer(400, "Invalid payload"));
 
         verify(model);
     }
@@ -261,7 +263,7 @@ public class CreateMatchHandlerTest {
 
         final CreateMatchHandler handler = new CreateMatchHandler(model);
 
-        assertThat(handler.process(createMatchPayload, Collections.emptyMap())).isEqualTo(new Answer(400));
+        assertThat(handler.process(createMatchPayload, Collections.emptyMap())).isEqualTo(new Answer(400, "Invalid payload"));
 
         verify(model);
     }
@@ -283,7 +285,7 @@ public class CreateMatchHandlerTest {
 
         final CreateMatchHandler handler = new CreateMatchHandler(model);
 
-        assertThat(handler.process(createMatchPayload, Collections.emptyMap())).isEqualTo(new Answer(400));
+        assertThat(handler.process(createMatchPayload, Collections.emptyMap())).isEqualTo(new Answer(400, "Invalid payload"));
 
         verify(model);
     }
@@ -314,7 +316,7 @@ public class CreateMatchHandlerTest {
 
         final CreateMatchHandler handler = new CreateMatchHandler(model);
 
-        assertThat(handler.process(createMatchPayload, Collections.emptyMap())).isEqualTo(new Answer(400));
+        assertThat(handler.process(createMatchPayload, Collections.emptyMap())).isEqualTo(new Answer(400, "Invalid payload"));
 
         verify(model);
     }
@@ -339,7 +341,7 @@ public class CreateMatchHandlerTest {
 
         final CreateMatchHandler handler = new CreateMatchHandler(model);
 
-        assertThat(handler.process(createMatchPayload, Collections.emptyMap())).isEqualTo(new Answer(400));
+        assertThat(handler.process(createMatchPayload, Collections.emptyMap())).isEqualTo(new Answer(400, "Invalid payload"));
 
         verify(model);
     }

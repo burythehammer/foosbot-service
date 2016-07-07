@@ -2,27 +2,27 @@ package com.foosbot.service;
 
 import com.beust.jcommander.Parameter;
 
-class CommandLineOptions {
+public class CommandLineOptions {
 
     @Parameter(names = "--debug")
     boolean debug = false;
 
     @Parameter(names = {"--service-port"})
-    Integer servicePort = 4567;
+    public Integer servicePort = 4567;
 
     @Parameter(names = {"--database"})
-    String database = "blog";
+    public String database = "blog";
 
     @Parameter(names = {"--db-host"})
-    String dbHost = "localhost";
+    public String dbHost = "localhost";
 
     @Parameter(names = {"--db-username"})
-    String dbUsername = "blog_owner";
+    public String dbUsername = "blog_owner";
 
     @Parameter(names = {"--db-password"})
-    String dbPassword = "sparkforthewin";
+    public String dbPassword = "sparkforthewin";
 
     @Parameter(names = {"--db-port"})
-    Integer dbPort = 5432;
+    public Integer dbPort = 5432;
 }
 
