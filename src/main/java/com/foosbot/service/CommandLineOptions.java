@@ -11,16 +11,16 @@ public class CommandLineOptions {
     public Integer servicePort = 4567;
 
     @Parameter(names = {"--database"})
-    public String database = "blog";
+    public String database = "oc_foosball_test";
 
     @Parameter(names = {"--db-host"})
     public String dbHost = "localhost";
 
     @Parameter(names = {"--db-username"})
-    public String dbUsername = "blog_owner";
+    public String dbUsername = "foosball_service";
 
     @Parameter(names = {"--db-password"})
-    public String dbPassword = "sparkforthewin";
+    public String dbPassword = "test";
 
     @Parameter(names = {"--db-port"})
     public Integer dbPort = 5432;

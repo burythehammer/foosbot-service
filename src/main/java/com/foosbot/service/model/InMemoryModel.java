@@ -1,7 +1,7 @@
 package com.foosbot.service.model;
 
 
-import com.foosbot.service.match.FoosballMatch;
+import com.foosbot.service.match.FoosballMatchResult;
 import com.foosbot.service.match.FoosballTeamResult;
 import com.foosbot.service.model.players.FoosballPlayer;
 
@@ -12,9 +12,9 @@ import static java.util.stream.Collectors.toList;
 
 public class InMemoryModel implements Model {
 
-    private Map<UUID, FoosballMatch> matches = new HashMap<>();
+    private Map<UUID, FoosballMatchResult> matches = new HashMap<>();
 
-    final static Comparator<FoosballMatch> byDate = (m1, m2) -> Long.compare(
+    final static Comparator<FoosballMatchResult> byDate = (m1, m2) -> Long.compare(
             Instant.parse(m1.timestamp).toEpochMilli(), Instant.parse(m2.timestamp).toEpochMilli());
 
     @Override
@@ -23,12 +23,12 @@ public class InMemoryModel implements Model {
     }
 
     @Override
-    public Optional<FoosballMatch> getMatchResult(final UUID uuid) {
+    public Optional<FoosballMatchResult> getMatchResult(final UUID uuid) {
         return Optional.ofNullable(matches.get(uuid));
     }
 
     @Override
-    public List<FoosballMatch> getAllMatchResults() {
+    public List<FoosballMatchResult> getAllMatchResults() {
         return matches.values().stream()
                 .sorted(byDate)
                 .collect(toList());
@@ -37,9 +37,14 @@ public class InMemoryModel implements Model {
     @Override
     public UUID addMatchResult(final FoosballPlayer reporter, final Set<FoosballTeamResult> results) {
         final UUID uuid = UUID.randomUUID();
-        final FoosballMatch match = new FoosballMatch(uuid, reporter, results, Instant.now().toString());
+        final FoosballMatchResult match = new FoosballMatchResult(uuid, reporter, results, Instant.now().toString());
         matches.put(uuid, match);
         return uuid;
+    }
+
+    @Override
+    public void clean() {
+        matches = new HashMap<>();
     }
 
 //    @Override
@@ -47,7 +52,7 @@ public class InMemoryModel implements Model {
 //
 //        return deprecatedMatches.stream().map(m -> {
 //            final UUID uuid = UUID.randomUUID();
-//            final FoosballMatch match = new FoosballMatch(uuid, m.reporter, m.results, m.timestamp.toString());
+//            final FoosballMatchResult match = new FoosballMatchResult(uuid, m.reporter, m.results, m.timestamp.toString());
 //            matches.put(uuid, match);
 //            return uuid;
 //        }).collect(toList());

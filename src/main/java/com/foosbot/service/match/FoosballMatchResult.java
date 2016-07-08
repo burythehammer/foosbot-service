@@ -13,7 +13,7 @@ import java.util.UUID;
 @Data
 @JsonIgnoreProperties(value = {"valid"})
 @AllArgsConstructor
-public class FoosballMatch implements Validates {
+public class FoosballMatchResult implements Validates {
     public UUID uuid;
     public FoosballPlayer reporter;
     public Set<FoosballTeamResult> results;

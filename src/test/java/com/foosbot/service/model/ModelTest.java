@@ -1,7 +1,7 @@
 package com.foosbot.service.model;
 
 
-import com.foosbot.service.match.FoosballMatch;
+import com.foosbot.service.match.FoosballMatchResult;
 import com.foosbot.service.match.FoosballTeamResult;
 import com.foosbot.service.model.players.FoosballPlayer;
 import com.google.common.collect.ImmutableSet;
@@ -29,6 +29,7 @@ public abstract class ModelTest {
     @Before
     public void setModel(){
         this.model = getModel();
+        model.clean();
     }
 
     @Test
@@ -53,17 +54,17 @@ public abstract class ModelTest {
         final UUID matchId = model.addMatchResult(reporter, results);
 
         final long now = Instant.now().toEpochMilli();
-        final Optional<FoosballMatch> searchResult = model.getMatchResult(matchId);
+        final Optional<FoosballMatchResult> searchResult = model.getMatchResult(matchId);
         assertThat(searchResult).isPresent();
 
-        final FoosballMatch foosballMatch = searchResult.get();
+        final FoosballMatchResult foosballMatchResult = searchResult.get();
 
         final SoftAssertions softly = new SoftAssertions();
 
-        softly.assertThat(foosballMatch.getUuid()).isEqualTo(matchId);
-        softly.assertThat(foosballMatch.getReporter()).isEqualTo(reporter);
-        softly.assertThat(foosballMatch.getResults()).containsExactlyElementsOf(results);
-        softly.assertThat(Instant.parse(foosballMatch.getTimestamp()).toEpochMilli()).isCloseTo(now, Offset.offset(100L));
+        softly.assertThat(foosballMatchResult.getUuid()).isEqualTo(matchId);
+        softly.assertThat(foosballMatchResult.getReporter()).isEqualTo(reporter);
+        softly.assertThat(foosballMatchResult.getResults()).containsExactlyElementsOf(results);
+        softly.assertThat(Instant.parse(foosballMatchResult.getTimestamp()).toEpochMilli()).isCloseTo(now, Offset.offset(100L));
 
         softly.assertAll();
     }
@@ -71,7 +72,7 @@ public abstract class ModelTest {
     @Test
     public void getEmptyMatchResult() throws Exception {
         final UUID uuid = UUID.randomUUID();
-        final Optional<FoosballMatch> matchResult = model.getMatchResult(uuid);
+        final Optional<FoosballMatchResult> matchResult = model.getMatchResult(uuid);
         assertThat(matchResult).isNotPresent();
     }
 
@@ -95,7 +96,7 @@ public abstract class ModelTest {
             ids.add(model.addMatchResult(reporter, results));
         }
 
-        final List<FoosballMatch> allMatchResults = model.getAllMatchResults();
+        final List<FoosballMatchResult> allMatchResults = model.getAllMatchResults();
 
 
         allMatchResults.forEach(foosballMatch -> {
@@ -105,7 +106,7 @@ public abstract class ModelTest {
             softly.assertThat(ids).contains(foosballMatch.getUuid());
             softly.assertThat(foosballMatch.getReporter()).isEqualTo(reporter);
             softly.assertThat(foosballMatch.getResults()).containsExactlyElementsOf(results);
-            softly.assertThat(Instant.parse(foosballMatch.getTimestamp()).toEpochMilli()).isCloseTo(now, Offset.offset(100L));
+            softly.assertThat(Instant.parse(foosballMatch.getTimestamp()).toEpochMilli()).isCloseTo(now, Offset.offset(1000L));
 
             softly.assertAll();
 
@@ -115,7 +116,7 @@ public abstract class ModelTest {
 
     @Test
     public void getAllMatchResultsWhenEmpty() throws Exception {
-        final List<FoosballMatch> allMatchResults = model.getAllMatchResults();
+        final List<FoosballMatchResult> allMatchResults = model.getAllMatchResults();
         assertThat(allMatchResults).isEmpty();
     }
 
@@ -134,9 +135,9 @@ public abstract class ModelTest {
 
         final UUID matchId = model.addMatchResult(reporter, results);
 
-        final List<FoosballMatch> allMatchResults = model.getAllMatchResults();
+        final List<FoosballMatchResult> allMatchResults = model.getAllMatchResults();
 
-        assertThat(allMatchResults).extracting(FoosballMatch::getUuid).contains(matchId);
+        assertThat(allMatchResults).extracting(FoosballMatchResult::getUuid).contains(matchId);
     }
 
 //    @Test

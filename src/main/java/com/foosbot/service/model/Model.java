@@ -1,7 +1,7 @@
 package com.foosbot.service.model;
 
 
-import com.foosbot.service.match.FoosballMatch;
+import com.foosbot.service.match.FoosballMatchResult;
 import com.foosbot.service.match.FoosballTeamResult;
 import com.foosbot.service.model.players.FoosballPlayer;
 
@@ -14,11 +14,13 @@ public interface Model {
 
     String hello();
 
-    Optional<FoosballMatch> getMatchResult(UUID uuid);
+    Optional<FoosballMatchResult> getMatchResult(UUID uuid);
 
-    List<FoosballMatch> getAllMatchResults();
+    List<FoosballMatchResult> getAllMatchResults();
 
     UUID addMatchResult(FoosballPlayer reporter, Set<FoosballTeamResult> results);
+
+    void clean();
 
 //    List<UUID> addMatchResults(Set<DeprecatedMatch> matches);
 //
@@ -27,7 +29,7 @@ public interface Model {
 //    Optional<PlayerStats> getPlayerStats(UUID uuid);
 //
 //    // season
-//    List<FoosballMatch> getAllSeasonMatches(String seasonName);
+//    List<FoosballMatchResult> getAllSeasonMatches(String seasonName);
 //
 //    List<RankResult> getSeasonRank(String seasonName);
 //

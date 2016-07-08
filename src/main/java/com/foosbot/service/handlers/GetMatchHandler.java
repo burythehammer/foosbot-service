@@ -1,7 +1,7 @@
 package com.foosbot.service.handlers;
 
 import com.foosbot.service.handlers.payloads.EmptyPayload;
-import com.foosbot.service.match.FoosballMatch;
+import com.foosbot.service.match.FoosballMatchResult;
 import com.foosbot.service.model.Model;
 
 import java.util.Map;
@@ -29,7 +29,7 @@ public class GetMatchHandler extends AbstractRequestHandler<EmptyPayload> {
             return new Answer(404, urlParams.get(":uuid") + " not a valid UUID");
         }
 
-        final Optional<FoosballMatch> match = model.getMatchResult(uuid);
+        final Optional<FoosballMatchResult> match = model.getMatchResult(uuid);
 
         if (!match.isPresent()) {
             return new Answer(404, "Match " + uuid + " not found");

@@ -2,7 +2,7 @@ package com.foosbot.service.handlers;
 
 
 import com.foosbot.service.handlers.payloads.EmptyPayload;
-import com.foosbot.service.match.FoosballMatch;
+import com.foosbot.service.match.FoosballMatchResult;
 import com.foosbot.service.match.FoosballTeamResult;
 import com.foosbot.service.model.Model;
 import com.foosbot.service.model.players.FoosballPlayer;
@@ -37,11 +37,11 @@ public class GetMatchHandlerTest {
         final Set<FoosballTeamResult> results = ImmutableSet.of(result1, result2);
         final String timestamp = "2016-07-07T12:07:45.098Z";
 
-        final FoosballMatch foosballMatch = new FoosballMatch(uuid, reporter, results, timestamp);
+        final FoosballMatchResult foosballMatchResult = new FoosballMatchResult(uuid, reporter, results, timestamp);
         final EmptyPayload payload = new EmptyPayload();
 
         final Model model = EasyMock.createMock(Model.class);
-        expect(model.getMatchResult(uuid)).andReturn(Optional.of(foosballMatch));
+        expect(model.getMatchResult(uuid)).andReturn(Optional.of(foosballMatchResult));
         replay(model);
 
         final GetMatchHandler handler = new GetMatchHandler(model);
