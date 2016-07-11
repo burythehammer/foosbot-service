@@ -2,6 +2,7 @@ package com.foosbot.service;
 
 import com.beust.jcommander.JCommander;
 import com.foosbot.service.handlers.CreateMatchHandler;
+import com.foosbot.service.handlers.DeleteMatchHandler;
 import com.foosbot.service.handlers.GetMatchHandler;
 import com.foosbot.service.handlers.HelloWorldHandler;
 import com.foosbot.service.model.InMemoryModel;
@@ -9,6 +10,7 @@ import com.foosbot.service.model.Model;
 
 import java.util.logging.Logger;
 
+import static spark.Spark.delete;
 import static spark.Spark.get;
 import static spark.Spark.post;
 
@@ -16,9 +18,9 @@ public class FoosballService {
 
     private static final Logger logger = Logger.getLogger(FoosballService.class.getCanonicalName());
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
 
-        CommandLineOptions options = new CommandLineOptions();
+        final CommandLineOptions options = new CommandLineOptions();
         new JCommander(options, args);
 
         logger.finest("Options.debug = " + options.debug);
@@ -29,7 +31,7 @@ public class FoosballService {
         logger.finest("Options.servicePort = " + options.servicePort);
 
 //        Model model = getSqlModel(options);
-        Model model = getInMemoryModel();
+        final Model model = getInMemoryModel();
 
         // test
         get("/hello", new HelloWorldHandler(model));
@@ -37,9 +39,9 @@ public class FoosballService {
         // matches
         get("/match/:uuid", new GetMatchHandler(model));
         post("/match/", new CreateMatchHandler(model));
+        delete("/match/:uuid", new DeleteMatchHandler(model));
 
 //        post("/match/batch/", new BatchMatchCreationHandler(model));
-//        delete("/match/:uuid", new DeleteMatchHandler(model));
 //
 //        // players
 //        get("/player/:name", new GetPlayerStatsHandler(model));

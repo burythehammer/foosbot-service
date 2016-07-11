@@ -24,7 +24,7 @@ public interface Model {
 
 //    List<UUID> addMatchResults(Set<DeprecatedMatch> matches);
 //
-//    void deleteMatch(UUID id);
+    void deleteMatch(UUID uuid) throws IllegalArgumentException;
 //
 //    Optional<PlayerStats> getPlayerStats(UUID uuid);
 //

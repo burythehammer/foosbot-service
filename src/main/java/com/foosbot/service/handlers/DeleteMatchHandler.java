@@ -4,17 +4,35 @@ import com.foosbot.service.handlers.payloads.EmptyPayload;
 import com.foosbot.service.model.Model;
 
 import java.util.Map;
+import java.util.UUID;
 
 
 public class DeleteMatchHandler extends AbstractRequestHandler<EmptyPayload> {
-    public DeleteMatchHandler(Model model) {
+    public DeleteMatchHandler(final Model model) {
         super(EmptyPayload.class, model);
     }
 
     @Override
-    protected Answer processImpl(EmptyPayload value, Map<String, String> urlParams) {
+    protected Answer processImpl(final EmptyPayload value, final Map<String, String> urlParams) {
 
+        if (!urlParams.containsKey(":uuid")) {
+            throw new IllegalArgumentException();
+        }
 
-        return null;
+        final UUID uuid;
+
+        try {
+            uuid = UUID.fromString(urlParams.get(":uuid"));
+        } catch (final IllegalArgumentException e) {
+            return new Answer(404, urlParams.get(":uuid") + " not a valid UUID");
+        }
+
+        try {
+            model.deleteMatch(uuid);
+        } catch (final IllegalArgumentException e){
+            return new Answer(404, "Match not found: " + uuid);
+        }
+
+        return Answer.ok(null);
     }
 }

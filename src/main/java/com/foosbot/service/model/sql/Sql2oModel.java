@@ -31,7 +31,7 @@ public class Sql2oModel implements Model {
     }
 
     public static Sql2oModel getSqlModel(final CommandLineOptions options) {
-        Sql2o sql2o = new Sql2o("jdbc:postgresql://" + options.dbHost + ":" + options.dbPort + "/" + options.database,
+        final Sql2o sql2o = new Sql2o("jdbc:postgresql://" + options.dbHost + ":" + options.dbPort + "/" + options.database,
                 options.dbUsername, options.dbPassword, new PostgresQuirks() {
             {
                 // make sure we use default UUID converter.
@@ -47,7 +47,7 @@ public class Sql2oModel implements Model {
     public void clean() {
         try {
             dropTable();
-        } catch (Sql2oException e) {
+        } catch (final Sql2oException e) {
             logger.info("Could not drop results table - does not exist");
         }
 
@@ -103,8 +103,9 @@ public class Sql2oModel implements Model {
             final List<FoosballMatchResultDTO> foosballMatchResultDTOs = conn.createQuery("select * from " + RESULTS_TABLE)
                     .executeAndFetch(FoosballMatchResultDTO.class);
 
-            return foosballMatchResultDTOs.stream().map(f -> f.getResult()).collect(Collectors.toList());
-
+            return foosballMatchResultDTOs.stream()
+                    .map(FoosballMatchResultDTO::getResult)
+                    .collect(Collectors.toList());
         }
     }
 
@@ -139,13 +140,28 @@ public class Sql2oModel implements Model {
 
             return matchUUID;
         }
+    }
 
+    @Override
+    public void deleteMatch(final UUID uuid) throws IllegalArgumentException {
+
+        final Optional<FoosballMatchResult> matchResult = getMatchResult(uuid);
+        if (!matchResult.isPresent()) throw new IllegalArgumentException("Cannot find match with id: " + uuid);
+
+        try (Connection conn = sql2o.beginTransaction()) {
+
+            conn.createQuery("DELETE FROM " + RESULTS_TABLE + " where uuid=:uuid")
+                    .addParameter("uuid", uuid.toString())
+                    .executeUpdate();
+
+            conn.commit();
+        }
     }
 
 
     private void dropTable() throws Sql2oException {
         try (Connection conn = sql2o.beginTransaction()) {
-            conn.createQuery("DROP TABLE results").executeUpdate();
+            conn.createQuery("DROP TABLE " + RESULTS_TABLE).executeUpdate();
             conn.commit();
         }
     }

@@ -47,6 +47,12 @@ public class InMemoryModel implements Model {
         matches = new HashMap<>();
     }
 
+    @Override
+    public void deleteMatch(final UUID uuid) {
+        final FoosballMatchResult removed = matches.remove(uuid);
+        if (removed == null) throw new IllegalArgumentException("Match not found: " + uuid);
+    }
+
 //    @Override
 //    public List<UUID> addMatchResults(final Set<DeprecatedMatch> deprecatedMatches) {
 //

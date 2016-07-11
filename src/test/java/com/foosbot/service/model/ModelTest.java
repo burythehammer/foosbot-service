@@ -18,6 +18,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 
 public abstract class ModelTest {
 
@@ -140,13 +141,36 @@ public abstract class ModelTest {
         assertThat(allMatchResults).extracting(FoosballMatchResult::getUuid).contains(matchId);
     }
 
-//    @Test
-//    public void addMatchResults() throws Exception {
-//
-//    }
 
-//    @Test
-//    public void deleteMatch() throws Exception {
-//
-//    }
+    @Test
+    public void deleteMatch() throws Exception {
+        final FoosballPlayer reporter = new FoosballPlayer("@mary");
+        final FoosballPlayer player1 = new FoosballPlayer("@matthew");
+        final FoosballPlayer player2 = new FoosballPlayer("@mark");
+        final FoosballPlayer player3 = new FoosballPlayer("@luke");
+        final FoosballPlayer player4 = new FoosballPlayer("@john");
+
+        final FoosballTeamResult result1 = new FoosballTeamResult(ImmutableSet.of(player1, player2), 5);
+        final FoosballTeamResult result2 = new FoosballTeamResult(ImmutableSet.of(player3, player4), 10);
+
+        final Set<FoosballTeamResult> results = ImmutableSet.of(result1, result2);
+
+        final UUID matchId = model.addMatchResult(reporter, results);
+
+        model.deleteMatch(matchId);
+
+        final List<FoosballMatchResult> allMatchResults = model.getAllMatchResults();
+        assertThat(allMatchResults).isEmpty();
+
+        final Optional<FoosballMatchResult> matchResult = model.getMatchResult(matchId);
+        assertThat(matchResult).isNotPresent();
+    }
+
+
+    @Test
+    public void deleteNonExistentMatch() throws Exception {
+        final UUID uuid = UUID.randomUUID();
+        final Throwable throwable = catchThrowable(() -> model.deleteMatch(uuid));
+        assertThat(throwable).isInstanceOf(IllegalArgumentException.class);
+    }
 }
