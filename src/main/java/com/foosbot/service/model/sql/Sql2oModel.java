@@ -6,6 +6,7 @@ import com.foosbot.service.match.FoosballMatchResult;
 import com.foosbot.service.match.FoosballTeamResult;
 import com.foosbot.service.model.Model;
 import com.foosbot.service.model.players.FoosballPlayer;
+import com.foosbot.service.model.players.PlayerStats;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 import org.sql2o.Sql2oException;
@@ -156,6 +157,11 @@ public class Sql2oModel implements Model {
 
             conn.commit();
         }
+    }
+
+    @Override
+    public Optional<PlayerStats> getPlayerStats(String playerName) {
+        return null;
     }
 
 

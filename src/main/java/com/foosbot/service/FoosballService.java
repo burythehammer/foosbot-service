@@ -4,6 +4,7 @@ import com.beust.jcommander.JCommander;
 import com.foosbot.service.handlers.CreateMatchHandler;
 import com.foosbot.service.handlers.DeleteMatchHandler;
 import com.foosbot.service.handlers.GetMatchHandler;
+import com.foosbot.service.handlers.GetPlayerStatsHandler;
 import com.foosbot.service.handlers.HelloWorldHandler;
 import com.foosbot.service.model.InMemoryModel;
 import com.foosbot.service.model.Model;
@@ -43,7 +44,7 @@ public class FoosballService {
 //        post("/match/batch/", new BatchMatchCreationHandler(model));
 //
 //        // players
-//        get("/player/:name", new GetPlayerStatsHandler(model));
+        get("/player/:name", new GetPlayerStatsHandler(model));
 //
 //        // season
 //        get("/season/:name", new GetSeasonHandler(model));

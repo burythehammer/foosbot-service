@@ -4,6 +4,7 @@ package com.foosbot.service.model;
 import com.foosbot.service.match.FoosballMatchResult;
 import com.foosbot.service.match.FoosballTeamResult;
 import com.foosbot.service.model.players.FoosballPlayer;
+import com.foosbot.service.model.players.PlayerStats;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +26,8 @@ public interface Model {
 //    List<UUID> addMatchResults(Set<DeprecatedMatch> matches);
 //
     void deleteMatch(UUID uuid) throws IllegalArgumentException;
+
+    Optional<PlayerStats> getPlayerStats(String playerName);
 //
 //    Optional<PlayerStats> getPlayerStats(UUID uuid);
 //
