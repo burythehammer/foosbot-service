@@ -24,7 +24,7 @@ public abstract class AbstractRequestHandler<V extends Validates> implements Req
     }
 
 
-    public static String dataToJson(final Object data) {
+    static String dataToJson(final Object data) {
         try {
             final ObjectMapper mapper = new ObjectMapper();
             mapper.enable(SerializationFeature.INDENT_OUTPUT);

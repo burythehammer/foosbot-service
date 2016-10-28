@@ -30,8 +30,7 @@ public class FoosballService {
         logger.finest("Options.dbPort = " + options.dbPort);
         logger.finest("Options.servicePort = " + options.servicePort);
 
-//        Model model = getSqlModel(options);
-        final Model model = getInMemoryModel();
+        final Model model = new InMemoryModel();
 
         // test
         get("/hello", new HelloWorldHandler(model));
@@ -55,10 +54,6 @@ public class FoosballService {
 //        // Global rank
 //        get("/rank/", new GetRankHandler(model));
 
-    }
-
-    private static Model getInMemoryModel() {
-        return new InMemoryModel();
     }
 
 

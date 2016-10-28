@@ -7,12 +7,12 @@ import java.util.Map;
 
 
 public class HelloWorldHandler extends AbstractRequestHandler<EmptyPayload> {
-    public HelloWorldHandler(Model model) {
+    public HelloWorldHandler(final Model model) {
         super(EmptyPayload.class, model);
     }
 
     @Override
-    protected Answer processImpl(EmptyPayload value, Map<String, String> urlParams) {
+    protected Answer processImpl(final EmptyPayload value, final Map<String, String> urlParams) {
         return Answer.ok(model.hello());
     }
 

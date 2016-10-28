@@ -6,7 +6,13 @@ import com.foosbot.service.match.FoosballTeamResult;
 import com.foosbot.service.model.players.FoosballPlayer;
 
 import java.time.Instant;
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 
 import static java.util.stream.Collectors.toList;
 
@@ -14,7 +20,7 @@ public class InMemoryModel implements Model {
 
     private Map<UUID, FoosballMatchResult> matches = new HashMap<>();
 
-    final static Comparator<FoosballMatchResult> byDate = (m1, m2) -> Long.compare(
+    private final static Comparator<FoosballMatchResult> byDate = (m1, m2) -> Long.compare(
             Instant.parse(m1.timestamp).toEpochMilli(), Instant.parse(m2.timestamp).toEpochMilli());
 
     @Override

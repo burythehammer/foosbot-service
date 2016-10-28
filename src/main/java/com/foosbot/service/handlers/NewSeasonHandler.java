@@ -7,12 +7,12 @@ import java.util.Map;
 
 
 public class NewSeasonHandler extends AbstractRequestHandler<NewSeasonPayload> {
-    public NewSeasonHandler(Model model) {
+    public NewSeasonHandler(final Model model) {
         super(NewSeasonPayload.class, model);
     }
 
     @Override
-    protected Answer processImpl(NewSeasonPayload value, Map<String, String> urlParams) {
+    protected Answer processImpl(final NewSeasonPayload value, final Map<String, String> urlParams) {
         return null;
     }
 }

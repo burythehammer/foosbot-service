@@ -7,12 +7,12 @@ import java.util.Map;
 
 
 public class BatchMatchCreationHandler extends AbstractRequestHandler<BatchMatchCreatePayload> {
-    public BatchMatchCreationHandler(Model model) {
+    public BatchMatchCreationHandler(final Model model) {
         super(BatchMatchCreatePayload.class, model);
     }
 
     @Override
-    protected Answer processImpl(BatchMatchCreatePayload value, Map<String, String> urlParams) {
+    protected Answer processImpl(final BatchMatchCreatePayload value, final Map<String, String> urlParams) {
         return null;
     }
 }

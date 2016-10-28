@@ -17,7 +17,7 @@ public class Answer {
         this.body = body;
     }
 
-    public static Answer ok(final String body) {
+    static Answer ok(final String body) {
         return new Answer(HttpStatus.OK_200, body);
     }
 
@@ -28,8 +28,7 @@ public class Answer {
 
         final Answer answer = (Answer) o;
 
-        if (code != answer.code) return false;
-        return body != null ? body.equals(answer.body) : answer.body == null;
+        return code == answer.code && (body != null ? body.equals(answer.body) : answer.body == null);
 
     }
 
@@ -45,11 +44,11 @@ public class Answer {
         return "Answer(code=" + code + ", body=" + body + ")";
     }
 
-    public String getBody() {
+    String getBody() {
         return body;
     }
 
-    public int getCode() {
+    int getCode() {
         return code;
     }
 }
