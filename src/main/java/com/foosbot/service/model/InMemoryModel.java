@@ -9,7 +9,6 @@ import com.foosbot.service.model.players.PlayerStats;
 
 import java.time.Instant;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -46,14 +45,21 @@ public class InMemoryModel implements Model {
     @Override
     public UUID addMatchResult(final FoosballPlayer reporter, final Set<FoosballTeamResult> results) {
         final UUID uuid = UUID.randomUUID();
-        final FoosballMatchResult match = new FoosballMatchResult(uuid, reporter, results, Instant.now().toString());
-        matches.put(uuid, match);
+
+        final FoosballMatchResult matchResult = FoosballMatchResult.builder()
+                .uuid(uuid)
+                .reporter(reporter)
+                .results(results)
+                .timestamp(Instant.now().toString())
+                .build();
+
+        matches.put(uuid, matchResult);
         return uuid;
     }
 
     @Override
     public void clean() {
-        matches = new HashMap<>();
+        matches = Maps.newHashMap();
     }
 
     @Override

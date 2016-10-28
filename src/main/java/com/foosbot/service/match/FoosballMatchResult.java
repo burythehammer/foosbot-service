@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.foosbot.service.handlers.Validates;
 import com.foosbot.service.model.players.FoosballPlayer;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.Collection;
@@ -14,6 +15,7 @@ import java.util.UUID;
 @Data
 @JsonIgnoreProperties(value = {"valid"})
 @AllArgsConstructor
+@Builder
 public class FoosballMatchResult implements Validates {
     public UUID uuid;
     public FoosballPlayer reporter;
