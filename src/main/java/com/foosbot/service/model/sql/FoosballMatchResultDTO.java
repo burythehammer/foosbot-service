@@ -1,8 +1,8 @@
 package com.foosbot.service.model.sql;
 
 
-import com.foosbot.service.match.FoosballMatchResult;
-import com.foosbot.service.match.FoosballTeamResult;
+import com.foosbot.service.match.FoosballMatch;
+import com.foosbot.service.match.TeamResult;
 import com.foosbot.service.model.players.FoosballPlayer;
 import com.google.common.collect.ImmutableSet;
 import lombok.Data;
@@ -24,14 +24,14 @@ public class FoosballMatchResultDTO {
     public int team2score;
     public Timestamp timestamp;
 
-    public FoosballMatchResult getResult() {
+    public FoosballMatch getResult() {
 
-        final Set<FoosballPlayer> team1players = ImmutableSet.of(new FoosballPlayer(team1p1), new FoosballPlayer(team1p2));
-        final Set<FoosballPlayer> team2players = ImmutableSet.of(new FoosballPlayer(team2p1), new FoosballPlayer(team2p2));
+        final Set<FoosballPlayer> team1players = ImmutableSet.of(FoosballPlayer.of(team1p1), FoosballPlayer.of(team1p2));
+        final Set<FoosballPlayer> team2players = ImmutableSet.of(FoosballPlayer.of(team2p1), FoosballPlayer.of(team2p2));
 
-        final FoosballTeamResult team1result = new FoosballTeamResult(team1players, team1score);
-        final FoosballTeamResult team2result = new FoosballTeamResult(team2players, team2score);
+        final TeamResult team1result = new TeamResult(team1players, team1score);
+        final TeamResult team2result = new TeamResult(team2players, team2score);
 
-        return new FoosballMatchResult(UUID.fromString(uuid), new FoosballPlayer(reporter), ImmutableSet.of(team1result, team2result), timestamp.toInstant().toString());
+        return new FoosballMatch(UUID.fromString(uuid), FoosballPlayer.of(reporter), ImmutableSet.of(team1result, team2result), timestamp.toInstant().toString());
     }
 }

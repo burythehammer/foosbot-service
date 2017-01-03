@@ -1,8 +1,8 @@
 package com.foosbot.service.model;
 
 
-import com.foosbot.service.match.FoosballMatchResult;
-import com.foosbot.service.match.FoosballTeamResult;
+import com.foosbot.service.match.FoosballMatch;
+import com.foosbot.service.match.TeamResult;
 import com.foosbot.service.model.players.FoosballPlayer;
 import com.foosbot.service.model.players.PlayerStats;
 
@@ -15,11 +15,11 @@ public interface Model {
 
     String hello();
 
-    Optional<FoosballMatchResult> getMatchResult(UUID uuid);
+    Optional<FoosballMatch> getMatchResult(UUID uuid);
 
-    List<FoosballMatchResult> getAllMatchResults();
+    List<FoosballMatch> getAllMatchResults();
 
-    UUID addMatchResult(FoosballPlayer reporter, Set<FoosballTeamResult> results);
+    UUID addMatchResult(FoosballPlayer reporter, Set<TeamResult> results);
 
     void clean();
 
@@ -32,7 +32,7 @@ public interface Model {
 //    Optional<PlayerStats> getPlayerStats(UUID uuid);
 //
 //    // season
-//    List<FoosballMatchResult> getAllSeasonMatches(String seasonName);
+//    List<FoosballMatch> getAllSeasonMatches(String seasonName);
 //
 //    List<RankResult> getSeasonRank(String seasonName);
 //

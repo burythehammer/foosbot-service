@@ -8,15 +8,16 @@ import lombok.Data;
 
 import java.util.Set;
 
-@Data @AllArgsConstructor
-public class FoosballTeamResult implements Validates{
+@Data
+@AllArgsConstructor
+public class TeamResult implements Validates {
 
     public Set<FoosballPlayer> players;
     public int score;
 
     @Override
     public boolean isValid() {
-        return  players != null &&
+        return players != null &&
                 !players.isEmpty() &&
                 !players.contains(null) &&
                 players.stream().allMatch(FoosballPlayer::isValid) &&

@@ -1,7 +1,6 @@
 package com.foosbot.service.model;
 
 
-@SuppressWarnings("OptionalGetWithoutIsPresent")
 public class InMemoryModelTest extends ModelTest {
 
 

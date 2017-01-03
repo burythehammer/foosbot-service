@@ -2,8 +2,8 @@ package com.foosbot.service.model.sql;
 
 
 import com.foosbot.service.CommandLineOptions;
-import com.foosbot.service.match.FoosballMatchResult;
-import com.foosbot.service.match.FoosballTeamResult;
+import com.foosbot.service.match.FoosballMatch;
+import com.foosbot.service.match.TeamResult;
 import com.foosbot.service.model.Model;
 import com.foosbot.service.model.players.FoosballPlayer;
 import com.foosbot.service.model.players.PlayerStats;
@@ -79,7 +79,7 @@ public class Sql2oModel implements Model {
     }
 
     @Override
-    public Optional<FoosballMatchResult> getMatchResult(final UUID uuid) {
+    public Optional<FoosballMatch> getMatchResult(final UUID uuid) {
 
         try (Connection conn = sql2o.open()) {
 
@@ -99,7 +99,7 @@ public class Sql2oModel implements Model {
     }
 
     @Override
-    public List<FoosballMatchResult> getAllMatchResults() {
+    public List<FoosballMatch> getAllMatchResults() {
         try (Connection conn = sql2o.open()) {
             final List<FoosballMatchResultDTO> foosballMatchResultDTOs = conn.createQuery("select * from " + RESULTS_TABLE)
                     .executeAndFetch(FoosballMatchResultDTO.class);
@@ -112,15 +112,15 @@ public class Sql2oModel implements Model {
 
 
     @Override
-    public UUID addMatchResult(final FoosballPlayer reporter, final Set<FoosballTeamResult> resultSet) {
+    public UUID addMatchResult(final FoosballPlayer reporter, final Set<TeamResult> resultSet) {
 
         try (Connection conn = sql2o.beginTransaction()) {
 
             final UUID matchUUID = UUID.randomUUID();
-            final List<FoosballTeamResult> results = new ArrayList<>(resultSet);
+            final List<TeamResult> results = new ArrayList<>(resultSet);
 
-            final FoosballTeamResult team1Result = results.get(0);
-            final FoosballTeamResult team2Result = results.get(1);
+            final TeamResult team1Result = results.get(0);
+            final TeamResult team2Result = results.get(1);
 
             final List<String> team1 = getPlayerNames(team1Result);
             final List<String> team2 = getPlayerNames(team2Result);
@@ -146,7 +146,7 @@ public class Sql2oModel implements Model {
     @Override
     public void deleteMatch(final UUID uuid) throws IllegalArgumentException {
 
-        final Optional<FoosballMatchResult> matchResult = getMatchResult(uuid);
+        final Optional<FoosballMatch> matchResult = getMatchResult(uuid);
         if (!matchResult.isPresent()) throw new IllegalArgumentException("Cannot find match with id: " + uuid);
 
         try (Connection conn = sql2o.beginTransaction()) {
@@ -161,6 +161,7 @@ public class Sql2oModel implements Model {
 
     @Override
     public Optional<PlayerStats> getPlayerStats(String playerName) {
+        // TODO
         return null;
     }
 
@@ -173,7 +174,7 @@ public class Sql2oModel implements Model {
     }
 
 
-    private List<String> getPlayerNames(final FoosballTeamResult team1Result) {
+    private List<String> getPlayerNames(final TeamResult team1Result) {
         return team1Result.getPlayers().stream().map(p -> p.name).collect(Collectors.toList());
     }
 

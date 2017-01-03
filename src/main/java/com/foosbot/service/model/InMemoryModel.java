@@ -2,8 +2,8 @@ package com.foosbot.service.model;
 
 
 import com.beust.jcommander.internal.Maps;
-import com.foosbot.service.match.FoosballMatchResult;
-import com.foosbot.service.match.FoosballTeamResult;
+import com.foosbot.service.match.FoosballMatch;
+import com.foosbot.service.match.TeamResult;
 import com.foosbot.service.model.players.FoosballPlayer;
 import com.foosbot.service.model.players.PlayerStats;
 
@@ -20,9 +20,9 @@ import static java.util.stream.Collectors.toList;
 
 public class InMemoryModel implements Model {
 
-    private Map<UUID, FoosballMatchResult> matches = Maps.newHashMap();
+    private Map<UUID, FoosballMatch> matches = Maps.newHashMap();
 
-    private final static Comparator<FoosballMatchResult> compareByDate = (m1, m2) -> Long.compare(
+    private final static Comparator<FoosballMatch> compareByDate = (m1, m2) -> Long.compare(
             Instant.parse(m1.timestamp).toEpochMilli(), Instant.parse(m2.timestamp).toEpochMilli());
 
     @Override
@@ -31,22 +31,22 @@ public class InMemoryModel implements Model {
     }
 
     @Override
-    public Optional<FoosballMatchResult> getMatchResult(final UUID uuid) {
+    public Optional<FoosballMatch> getMatchResult(final UUID uuid) {
         return Optional.ofNullable(matches.get(uuid));
     }
 
     @Override
-    public List<FoosballMatchResult> getAllMatchResults() {
+    public List<FoosballMatch> getAllMatchResults() {
         return matches.values().stream()
                 .sorted(compareByDate)
                 .collect(toList());
     }
 
     @Override
-    public UUID addMatchResult(final FoosballPlayer reporter, final Set<FoosballTeamResult> results) {
+    public UUID addMatchResult(final FoosballPlayer reporter, final Set<TeamResult> results) {
         final UUID uuid = UUID.randomUUID();
 
-        final FoosballMatchResult matchResult = FoosballMatchResult.builder()
+        final FoosballMatch matchResult = FoosballMatch.builder()
                 .uuid(uuid)
                 .reporter(reporter)
                 .results(results)
@@ -64,7 +64,7 @@ public class InMemoryModel implements Model {
 
     @Override
     public void deleteMatch(final UUID uuid) {
-        final FoosballMatchResult removed = matches.remove(uuid);
+        final FoosballMatch removed = matches.remove(uuid);
         if (removed == null) throw new IllegalArgumentException("Match not found: " + uuid);
     }
 
@@ -72,12 +72,12 @@ public class InMemoryModel implements Model {
     @Override
     public Optional<PlayerStats> getPlayerStats(final String playerName) {
 
-        final List<FoosballMatchResult> playerGames = getPlayerGames(playerName);
+        final List<FoosballMatch> playerGames = getPlayerGames(playerName);
 
         if (playerGames.isEmpty()) return Optional.empty();
 
         final PlayerStats playerStats = PlayerStats.builder()
-                .lastMatch(playerGames.get(0))
+                .lastMatch(playerGames.get(0).uuid)
                 .gamesPlayed(playerGames.size())
                 .gamesWon(getNumberOfGamesWon(playerName))
                 .gamesLost(getNumberOfGamesLost(playerName))
@@ -88,7 +88,7 @@ public class InMemoryModel implements Model {
 
 
 
-    private List<FoosballMatchResult> getPlayerGames(final String playerName) {
+    private List<FoosballMatch> getPlayerGames(final String playerName) {
         return matches.values().stream()
                 .filter(v -> v.playerInGame(playerName))
                 .sorted(compareByDate)
@@ -113,7 +113,7 @@ public class InMemoryModel implements Model {
 //
 //        return deprecatedMatches.stream().map(m -> {
 //            final UUID uuid = UUID.randomUUID();
-//            final FoosballMatchResult match = new FoosballMatchResult(uuid, m.reporter, m.results, m.timestamp.toString());
+//            final FoosballMatch match = new FoosballMatch(uuid, m.reporter, m.results, m.timestamp.toString());
 //            matches.put(uuid, match);
 //            return uuid;
 //        }).collect(toList());

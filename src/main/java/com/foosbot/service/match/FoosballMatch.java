@@ -16,10 +16,10 @@ import java.util.UUID;
 @JsonIgnoreProperties(value = {"valid"})
 @AllArgsConstructor
 @Builder
-public class FoosballMatchResult implements Validates {
+public class FoosballMatch implements Validates {
     public UUID uuid;
     public FoosballPlayer reporter;
-    public Set<FoosballTeamResult> results;
+    public Set<TeamResult> results;
     public String timestamp;
 
     public boolean isValid() {
@@ -32,7 +32,7 @@ public class FoosballMatchResult implements Validates {
 
     public boolean playerInGame(final String playerName) {
         return results.stream()
-                .map(FoosballTeamResult::getPlayers)
+                .map(TeamResult::getPlayers)
                 .flatMap(Collection::stream)
                 .map(FoosballPlayer::getName)
                 .anyMatch(n -> n.equals(playerName));
@@ -43,7 +43,7 @@ public class FoosballMatchResult implements Validates {
 
         return results.stream()
                 .filter(result -> result.getScore() == 10)
-                .map(FoosballTeamResult::getPlayers)
+                .map(TeamResult::getPlayers)
                 .flatMap(Collection::stream)
                 .anyMatch(player -> player.name.equals(playerName));
     }

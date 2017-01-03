@@ -1,8 +1,8 @@
 package com.foosbot.service.model;
 
 
-import com.foosbot.service.match.FoosballMatchResult;
-import com.foosbot.service.match.FoosballTeamResult;
+import com.foosbot.service.match.FoosballMatch;
+import com.foosbot.service.match.TeamResult;
 import com.foosbot.service.model.players.FoosballPlayer;
 import com.google.common.collect.ImmutableSet;
 import org.assertj.core.api.SoftAssertions;
@@ -27,6 +27,12 @@ public abstract class ModelTest {
 
     public abstract Model getModel();
 
+    private static final FoosballPlayer PLAYER_1 = FoosballPlayer.of("@matthew");
+    private static final FoosballPlayer PLAYER_2 = FoosballPlayer.of("@mark");
+    private static final FoosballPlayer PLAYER_3 = FoosballPlayer.of("@luke");
+    private static final FoosballPlayer PLAYER_4 = FoosballPlayer.of("@john");
+    private static final FoosballPlayer REPORTER = FoosballPlayer.of("@mary");
+
     @Before
     public void setModel(){
         this.model = getModel();
@@ -41,31 +47,27 @@ public abstract class ModelTest {
 
     @Test
     public void getMatchResult() throws Exception {
-        final FoosballPlayer reporter = new FoosballPlayer("@mary");
-        final FoosballPlayer player1 = new FoosballPlayer("@matthew");
-        final FoosballPlayer player2 = new FoosballPlayer("@mark");
-        final FoosballPlayer player3 = new FoosballPlayer("@luke");
-        final FoosballPlayer player4 = new FoosballPlayer("@john");
+       
 
-        final FoosballTeamResult result1 = new FoosballTeamResult(ImmutableSet.of(player1, player2), 5);
-        final FoosballTeamResult result2 = new FoosballTeamResult(ImmutableSet.of(player3, player4), 10);
+        final TeamResult result1 = new TeamResult(ImmutableSet.of(PLAYER_1, PLAYER_2), 5);
+        final TeamResult result2 = new TeamResult(ImmutableSet.of(PLAYER_3, PLAYER_4), 10);
 
-        final Set<FoosballTeamResult> results = ImmutableSet.of(result1, result2);
+        final Set<TeamResult> results = ImmutableSet.of(result1, result2);
 
-        final UUID matchId = model.addMatchResult(reporter, results);
+        final UUID matchId = model.addMatchResult(REPORTER, results);
 
         final long now = Instant.now().toEpochMilli();
-        final Optional<FoosballMatchResult> searchResult = model.getMatchResult(matchId);
+        final Optional<FoosballMatch> searchResult = model.getMatchResult(matchId);
         assertThat(searchResult).isPresent();
 
-        final FoosballMatchResult foosballMatchResult = searchResult.get();
+        final FoosballMatch foosballMatch = searchResult.get();
 
         final SoftAssertions softly = new SoftAssertions();
 
-        softly.assertThat(foosballMatchResult.getUuid()).isEqualTo(matchId);
-        softly.assertThat(foosballMatchResult.getReporter()).isEqualTo(reporter);
-        softly.assertThat(foosballMatchResult.getResults()).containsExactlyElementsOf(results);
-        softly.assertThat(Instant.parse(foosballMatchResult.getTimestamp()).toEpochMilli()).isCloseTo(now, Offset.offset(100L));
+        softly.assertThat(foosballMatch.getUuid()).isEqualTo(matchId);
+        softly.assertThat(foosballMatch.getReporter()).isEqualTo(REPORTER);
+        softly.assertThat(foosballMatch.getResults()).containsExactlyElementsOf(results);
+        softly.assertThat(Instant.parse(foosballMatch.getTimestamp()).toEpochMilli()).isCloseTo(now, Offset.offset(100L));
 
         softly.assertAll();
     }
@@ -73,31 +75,27 @@ public abstract class ModelTest {
     @Test
     public void getEmptyMatchResult() throws Exception {
         final UUID uuid = UUID.randomUUID();
-        final Optional<FoosballMatchResult> matchResult = model.getMatchResult(uuid);
+        final Optional<FoosballMatch> matchResult = model.getMatchResult(uuid);
         assertThat(matchResult).isNotPresent();
     }
 
     @Test
     public void getAllMatchResults() throws Exception {
-        final FoosballPlayer reporter = new FoosballPlayer("@mary");
-        final FoosballPlayer player1 = new FoosballPlayer("@matthew");
-        final FoosballPlayer player2 = new FoosballPlayer("@mark");
-        final FoosballPlayer player3 = new FoosballPlayer("@luke");
-        final FoosballPlayer player4 = new FoosballPlayer("@john");
 
-        final FoosballTeamResult result1 = new FoosballTeamResult(ImmutableSet.of(player1, player2), 5);
-        final FoosballTeamResult result2 = new FoosballTeamResult(ImmutableSet.of(player3, player4), 10);
 
-        final Set<FoosballTeamResult> results = ImmutableSet.of(result1, result2);
+        final TeamResult result1 = new TeamResult(ImmutableSet.of(PLAYER_1, PLAYER_2), 5);
+        final TeamResult result2 = new TeamResult(ImmutableSet.of(PLAYER_3, PLAYER_4), 10);
+
+        final Set<TeamResult> results = ImmutableSet.of(result1, result2);
         final List<UUID> ids = Lists.newArrayList();
 
         final long now = Instant.now().toEpochMilli();
 
         for (int i = 0; i < 50; i++) {
-            ids.add(model.addMatchResult(reporter, results));
+            ids.add(model.addMatchResult(REPORTER, results));
         }
 
-        final List<FoosballMatchResult> allMatchResults = model.getAllMatchResults();
+        final List<FoosballMatch> allMatchResults = model.getAllMatchResults();
 
 
         allMatchResults.forEach(foosballMatch -> {
@@ -105,7 +103,7 @@ public abstract class ModelTest {
             final SoftAssertions softly = new SoftAssertions();
 
             softly.assertThat(ids).contains(foosballMatch.getUuid());
-            softly.assertThat(foosballMatch.getReporter()).isEqualTo(reporter);
+            softly.assertThat(foosballMatch.getReporter()).isEqualTo(REPORTER);
             softly.assertThat(foosballMatch.getResults()).containsExactlyElementsOf(results);
             softly.assertThat(Instant.parse(foosballMatch.getTimestamp()).toEpochMilli()).isCloseTo(now, Offset.offset(1000L));
 
@@ -117,52 +115,42 @@ public abstract class ModelTest {
 
     @Test
     public void getAllMatchResultsWhenEmpty() throws Exception {
-        final List<FoosballMatchResult> allMatchResults = model.getAllMatchResults();
+        final List<FoosballMatch> allMatchResults = model.getAllMatchResults();
         assertThat(allMatchResults).isEmpty();
     }
 
     @Test
     public void addMatchResult() throws Exception {
-        final FoosballPlayer reporter = new FoosballPlayer("@mary");
-        final FoosballPlayer player1 = new FoosballPlayer("@matthew");
-        final FoosballPlayer player2 = new FoosballPlayer("@mark");
-        final FoosballPlayer player3 = new FoosballPlayer("@luke");
-        final FoosballPlayer player4 = new FoosballPlayer("@john");
 
-        final FoosballTeamResult result1 = new FoosballTeamResult(ImmutableSet.of(player1, player2), 5);
-        final FoosballTeamResult result2 = new FoosballTeamResult(ImmutableSet.of(player3, player4), 10);
+        final TeamResult result1 = new TeamResult(ImmutableSet.of(PLAYER_1, PLAYER_2), 5);
+        final TeamResult result2 = new TeamResult(ImmutableSet.of(PLAYER_3, PLAYER_4), 10);
 
-        final Set<FoosballTeamResult> results = ImmutableSet.of(result1, result2);
+        final Set<TeamResult> results = ImmutableSet.of(result1, result2);
 
-        final UUID matchId = model.addMatchResult(reporter, results);
+        final UUID matchId = model.addMatchResult(REPORTER, results);
 
-        final List<FoosballMatchResult> allMatchResults = model.getAllMatchResults();
+        final List<FoosballMatch> allMatchResults = model.getAllMatchResults();
 
-        assertThat(allMatchResults).extracting(FoosballMatchResult::getUuid).contains(matchId);
+        assertThat(allMatchResults).extracting(FoosballMatch::getUuid).contains(matchId);
     }
 
 
     @Test
     public void deleteMatch() throws Exception {
-        final FoosballPlayer reporter = new FoosballPlayer("@mary");
-        final FoosballPlayer player1 = new FoosballPlayer("@matthew");
-        final FoosballPlayer player2 = new FoosballPlayer("@mark");
-        final FoosballPlayer player3 = new FoosballPlayer("@luke");
-        final FoosballPlayer player4 = new FoosballPlayer("@john");
 
-        final FoosballTeamResult result1 = new FoosballTeamResult(ImmutableSet.of(player1, player2), 5);
-        final FoosballTeamResult result2 = new FoosballTeamResult(ImmutableSet.of(player3, player4), 10);
+        final TeamResult result1 = new TeamResult(ImmutableSet.of(PLAYER_1, PLAYER_2), 5);
+        final TeamResult result2 = new TeamResult(ImmutableSet.of(PLAYER_3, PLAYER_4), 10);
 
-        final Set<FoosballTeamResult> results = ImmutableSet.of(result1, result2);
+        final Set<TeamResult> results = ImmutableSet.of(result1, result2);
 
-        final UUID matchId = model.addMatchResult(reporter, results);
+        final UUID matchId = model.addMatchResult(REPORTER, results);
 
         model.deleteMatch(matchId);
 
-        final List<FoosballMatchResult> allMatchResults = model.getAllMatchResults();
+        final List<FoosballMatch> allMatchResults = model.getAllMatchResults();
         assertThat(allMatchResults).isEmpty();
 
-        final Optional<FoosballMatchResult> matchResult = model.getMatchResult(matchId);
+        final Optional<FoosballMatch> matchResult = model.getMatchResult(matchId);
         assertThat(matchResult).isNotPresent();
     }
 

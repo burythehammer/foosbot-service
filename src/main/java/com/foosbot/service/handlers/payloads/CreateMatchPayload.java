@@ -3,7 +3,7 @@ package com.foosbot.service.handlers.payloads;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.foosbot.service.handlers.Validates;
-import com.foosbot.service.match.FoosballTeamResult;
+import com.foosbot.service.match.TeamResult;
 import com.foosbot.service.model.players.FoosballPlayer;
 import lombok.Data;
 
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class CreateMatchPayload implements Validates {
 
     public FoosballPlayer reporter;
-    public Set<FoosballTeamResult> results;
+    public Set<TeamResult> results;
 
     public boolean isValid() {
         return reporter != null &&
@@ -23,7 +23,7 @@ public class CreateMatchPayload implements Validates {
                 results != null &&
                 results.size() == 2 &&
                 scoresValid() &&
-                results.stream().allMatch(FoosballTeamResult::isValid);
+                results.stream().allMatch(TeamResult::isValid);
     }
 
     private boolean scoresValid() {
@@ -37,7 +37,7 @@ public class CreateMatchPayload implements Validates {
 
     private Set<Integer> getScores() {
         return results.stream()
-                .map(FoosballTeamResult::getScore)
+                .map(TeamResult::getScore)
                 .collect(Collectors.toSet());
     }
 

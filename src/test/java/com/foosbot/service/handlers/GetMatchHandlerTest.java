@@ -2,8 +2,8 @@ package com.foosbot.service.handlers;
 
 
 import com.foosbot.service.handlers.payloads.EmptyPayload;
-import com.foosbot.service.match.FoosballMatchResult;
-import com.foosbot.service.match.FoosballTeamResult;
+import com.foosbot.service.match.FoosballMatch;
+import com.foosbot.service.match.TeamResult;
 import com.foosbot.service.model.Model;
 import com.foosbot.service.model.players.FoosballPlayer;
 import com.google.common.collect.ImmutableMap;
@@ -22,26 +22,27 @@ public class GetMatchHandlerTest {
 
     private static final UUID uuid = UUID.fromString("728084e8-7c9a-4133-a9a7-f2bb491ef436");
 
+    private static final FoosballPlayer PLAYER_1 = FoosballPlayer.of("@matthew");
+    private static final FoosballPlayer PLAYER_2 = FoosballPlayer.of("@mark");
+    private static final FoosballPlayer PLAYER_3 = FoosballPlayer.of("@luke");
+    private static final FoosballPlayer PLAYER_4 = FoosballPlayer.of("@john");
+    private static final FoosballPlayer REPORTER = FoosballPlayer.of("@mary");
+
 
     @Test
     public void getExistingMatch() throws Exception {
-        final FoosballPlayer reporter = new FoosballPlayer("@mary");
-        final FoosballPlayer player1 = new FoosballPlayer("@matthew");
-        final FoosballPlayer player2 = new FoosballPlayer("@mark");
-        final FoosballPlayer player3 = new FoosballPlayer("@luke");
-        final FoosballPlayer player4 = new FoosballPlayer("@john");
 
-        final FoosballTeamResult result1 = new FoosballTeamResult(ImmutableSet.of(player1, player2), 5);
-        final FoosballTeamResult result2 = new FoosballTeamResult(ImmutableSet.of(player3, player4), 10);
+        final TeamResult result1 = new TeamResult(ImmutableSet.of(PLAYER_1, PLAYER_2), 5);
+        final TeamResult result2 = new TeamResult(ImmutableSet.of(PLAYER_3, PLAYER_4), 10);
 
-        final Set<FoosballTeamResult> results = ImmutableSet.of(result1, result2);
+        final Set<TeamResult> results = ImmutableSet.of(result1, result2);
         final String timestamp = "2016-07-07T12:07:45.098Z";
 
-        final FoosballMatchResult foosballMatchResult = new FoosballMatchResult(uuid, reporter, results, timestamp);
+        final FoosballMatch foosballMatch = new FoosballMatch(uuid, REPORTER, results, timestamp);
         final EmptyPayload payload = new EmptyPayload();
 
         final Model model = EasyMock.createMock(Model.class);
-        expect(model.getMatchResult(uuid)).andReturn(Optional.of(foosballMatchResult));
+        expect(model.getMatchResult(uuid)).andReturn(Optional.of(foosballMatch));
         replay(model);
 
         final GetMatchHandler handler = new GetMatchHandler(model);

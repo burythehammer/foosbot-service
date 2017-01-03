@@ -16,7 +16,7 @@ import java.util.Set;
 public class DeprecatedMatch implements Validates {
 
     public FoosballPlayer reporter;
-    public Set<FoosballTeamResult> results;
+    public Set<TeamResult> results;
     public Instant timestamp;
 
     public boolean isValid() {
