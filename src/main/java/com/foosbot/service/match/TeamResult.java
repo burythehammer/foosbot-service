@@ -20,6 +20,7 @@ public class TeamResult implements Validates {
         return players != null &&
                 !players.isEmpty() &&
                 !players.contains(null) &&
+                players.size() == 2 &&
                 players.stream().allMatch(FoosballPlayer::isValid) &&
                 score <= 10 &&
                 score >= 0;

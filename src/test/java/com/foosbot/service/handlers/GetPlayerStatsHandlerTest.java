@@ -26,9 +26,9 @@ public class GetPlayerStatsHandlerTest {
     public void getPlayerStats() throws Exception {
 
         PlayerStats playerStats = PlayerStats.builder()
-                .gamesWon(5)
-                .gamesLost(7)
-                .gamesPlayed(12)
+                .matchesWon(5)
+                .matchesLost(7)
+                .matchesPlayed(12)
                 .lastMatch(uuid)
                 .build();
 
@@ -40,8 +40,8 @@ public class GetPlayerStatsHandlerTest {
 
         final String expectedOutput =
                 "{\n" +
-                        "  \"gamesWon\" : 5,\n" +
-                        "  \"gamesLost\" : 7,\n" +
+                        "  \"matchesWon\" : 5,\n" +
+                        "  \"matchesLost\" : 7,\n" +
                         "  \"gamesPlayed\" : 12,\n" +
                         "  \"lastMatch\" : \"71828403-28b8-41e0-9c01-b0a93518bf44\"\n" +
                         "}";

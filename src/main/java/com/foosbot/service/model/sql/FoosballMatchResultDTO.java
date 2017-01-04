@@ -24,7 +24,7 @@ public class FoosballMatchResultDTO {
     public int team2score;
     public Timestamp timestamp;
 
-    public FoosballMatch getResult() {
+    FoosballMatch getResult() {
 
         final Set<FoosballPlayer> team1players = ImmutableSet.of(FoosballPlayer.of(team1p1), FoosballPlayer.of(team1p2));
         final Set<FoosballPlayer> team2players = ImmutableSet.of(FoosballPlayer.of(team2p1), FoosballPlayer.of(team2p2));

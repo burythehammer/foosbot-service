@@ -11,6 +11,7 @@ import lombok.Data;
 import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Data
 @JsonIgnoreProperties(value = {"valid"})
@@ -22,15 +23,26 @@ public class FoosballMatch implements Validates {
     public Set<TeamResult> results;
     public String timestamp;
 
+
     public boolean isValid() {
 
         return uuid != null
                 && reporter.isValid()
+                && results.stream().allMatch(TeamResult::isValid)
+                && uniquePlayers()
                 && !results.isEmpty()
                 && timestamp != null;
     }
 
-    public boolean playerInGame(final String playerName) {
+    private boolean uniquePlayers() {
+        return getAllPlayers().size() == 4;
+    }
+
+    private Set<FoosballPlayer> getAllPlayers() {
+        return results.stream().flatMap(r -> r.getPlayers().stream()).collect(Collectors.toSet());
+    }
+
+    public boolean playerInMatch(final String playerName) {
         return results.stream()
                 .map(TeamResult::getPlayers)
                 .flatMap(Collection::stream)
@@ -39,7 +51,7 @@ public class FoosballMatch implements Validates {
     }
 
     public boolean didPlayerWin(final String playerName) {
-        if (!playerInGame(playerName)) throw new IllegalArgumentException("Player " + playerName + " not in game");
+        if (!playerInMatch(playerName)) throw new IllegalArgumentException("Player " + playerName + " not in game");
 
         return results.stream()
                 .filter(result -> result.getScore() == 10)
@@ -47,4 +59,6 @@ public class FoosballMatch implements Validates {
                 .flatMap(Collection::stream)
                 .anyMatch(player -> player.name.equals(playerName));
     }
+
+
 }
